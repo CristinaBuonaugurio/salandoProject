@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 db = SQLAlchemy()
 
 
+
 class product(db.Model):
     __tablename__ = "product" 
     id = db.Column(db.Integer, primary_key=True)
@@ -19,16 +20,14 @@ class product(db.Model):
     users = db.relationship('user', secondary='userbuyproduct', lazy='joined')
 
 
-
 class category(db.Model):
     __tablename__ = "category"
     id = db.Column(db.Integer, primary_key = True)
     description = db.Column(db.String(20), nullable = False)
 
+    ### Relantionships
     products = db.relationship('products', backref='product')
     coupons = db.relationship('couponsAssociated', backref='category')
-
-
 
 class coupon(db.Model):
     __tablename__ = "coupon"
@@ -36,7 +35,7 @@ class coupon(db.Model):
     endValidation = db.Column(db.Date, nullable=False)
 
     ### ForeignKeys 
-    idUser = db.Column(db.String(30), db.ForeignKey('user.id'), nullable=False)
+    idUser = db.Column(db.String(30), db.ForeignKey('user.idMail'), nullable=False)
     idCategory = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
 
 
@@ -48,6 +47,7 @@ class userBuyProduct(db.Model):
     idProduct = db.Column(db.Integer, db.ForeignKey('product.id'), primary_key=True)
     numOfProd = db.Column(db.Integer, nullable=False, default=1)
 
+    ### Relationships
     users = db.relationship('user', backref=("user_assoc"))
     products = db.relationship('product', backref=("product_assoc"))
 
@@ -72,6 +72,4 @@ class user(db.Model):
 
     ### Relationships
     products = db.relationship('product', secondary='userbuyproduct', lazy='joined')
-    
     coupons = db.relationship('coupons', backref='coupon')
-
