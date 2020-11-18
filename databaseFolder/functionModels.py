@@ -2,7 +2,8 @@ from databaseFolder import models
 from flask import jsonify
 from sqlalchemy import distinct, func
 import datetime
-
+import random
+import sys
 ### begin functions for model category
 
 def getCategories(routeRequest = None):
@@ -91,6 +92,18 @@ def insertNewProduct( name, description, category, cost, quantity=1, routeReques
     return jsonify("Bella fra.")
 
 
+def updateQuantityProduct(idproduct, quantityUpdate, routeRequest=None):
+    if quantityUpdate > 0:
+        models.db.session.query(models.product).filter_by(id=idproduct).update({'quantity': quantityUpdate})
+        models.db.session.commit()
+    return jsonify("Updated quantity.")
+
+def updateDescriptionProduct(idproduct, description, routeRequest=None):
+    models.db.session.query(models.product).filter_by(id=idproduct).update({'description': description})
+    models.db.session.commit()
+    return jsonify("Updated description for product with id: {}".format(idproduct))
+
+
 ### end functions for model product 
 ###
 ###
@@ -143,6 +156,12 @@ def getNumBuyOfProduct(idproduct, routeRequest=None):
     else:
         return results
 
+def buyProducts(client, product, numofprod):
+    purchase = models.userBuyProduct(id=random.randint(0,10000),iduser=client, idproduct = product, numofprod =numofprod)
+    models.db.session.add(purchase)
+    models.db.session.commit()
+    return jsonify("The client {} has bought the product with id: {}".format(client, product))
+
 
 ### end functions for model userbuyproduct 
 ###
@@ -164,7 +183,7 @@ def checkCoupon(iduser, routeRequest=None):
     else:
         return results
 
-def insertCoupon( idcategory, iduser, routeRequest=None):
+def insertCoupon(idcategory, iduser, routeRequest=None):
     rs = models.coupon.query.filter_by(iduser=iduser).first()
     if rs is None:
         endVal = datetime.datetime.now()
@@ -173,7 +192,19 @@ def insertCoupon( idcategory, iduser, routeRequest=None):
         models.db.session.add(newcoupon)
         models.db.session.commit()
     return jsonify("Fine.")
-        
+
+def checkOldCoupon():
+    oldDate = datetime.datetime.now()
+    models.db.session.query(models.coupon).filter(models.coupon.endvalidation < oldDate).delete()
+    models.db.session.commit()
+    return jsonify("Fine.")
+
+def deleteCoupon(idcliente,routeRequest=None):
+    models.coupon.query.filter_by(iduser = idcliente).delete()
+    models.db.session.commit()
+    return jsonify("Deleted")
+
+
 ### end functions for model coupon 
 ###
 ###

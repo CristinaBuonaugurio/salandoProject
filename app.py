@@ -11,7 +11,8 @@ models.db.init_app(app)
 migrate = Migrate(app, models.db)
 
 @app.route('/')
-def hello_world():
-    return functionModels.insertCoupon(idcategory = 2, iduser = 'pippo@sowlo.it', routeRequest='route')
+def main_page():
+    return jsonify('This is the home.')
+
 
     
