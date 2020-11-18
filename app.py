@@ -12,8 +12,6 @@ migrate = Migrate(app, models.db)
 
 @app.route('/')
 def hello_world():
-    products = functionModels.getAllProducts()
-    print(products[3])
-    return functionModels.getAllProducts('route')
+    return functionModels.insertCoupon(idcategory = 2, iduser = 'pippo@sowlo.it', routeRequest='route')
 
     
