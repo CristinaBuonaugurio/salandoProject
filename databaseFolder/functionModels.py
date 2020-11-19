@@ -84,12 +84,18 @@ def getProductsByCategory(idcategory, routeRequest=None):
     else:
         return results 
 
-def insertNewProduct( name, description, category, cost, quantity=1, routeRequest=None):
-    p = models.product(name=name, description=description, cost=cost, quantity=quantity, idcategory=category)
-    models.db.session.add(p)
-    models.db.session.commit()
+def insertNewProduct(name, description, category, cost, quantity=1, routeRequest=None):
+    errore = False
+    try:
+        p = models.product(name=name, description=description, cost=cost, quantity=quantity, idcategory=category)
+        models.db.session.add(p)
+        models.db.session.commit()
+    except:
+        error = True
+        models.db.session.rollback()
+    finally:
+        models.db.session.close()
 
-    return jsonify("Bella fra.")
 
 
 def updateQuantityProduct(idproduct, quantityUpdate, routeRequest=None):
@@ -111,35 +117,39 @@ def updateDescriptionProduct(idproduct, description, routeRequest=None):
 
 def getBuyProductsByUsers(client, routeRequest=None):
     productsB = models.userBuyProduct.query.filter_by(iduser=client).all()
-    results = []
-    if len(productsB) > 1:
+    dict = {}
+    if len(productsB) >= 1:
         for p in productsB:
-            results.append(p.idproduct)
-            results.append(p.numofprod)
+            if p.idproduct in dict:
+                 dict[p.idproduct] += p.numofprod
+            else:     
+                dict[p.idproduct] = p.numofprod 
     else:
+        if routeRequest is not None:  
+            msg = "There is no products"
+            return jsonify(msg)
+        else:
+            return None
+    
+    if routeRequest is not None:  
         msg = "There is no products"
         return jsonify(msg)
-
-    if routeRequest is not None:          
-        return jsonify(results)
     else:
-        return results   
+        return dict
 
-def getClients(routeRequest=None):
+
+
+def getClients():
     usersB = models.userBuyProduct.query.with_entities(models.userBuyProduct.iduser).distinct().all()
     results = []
-    print(usersB)
-    if len(usersB) > 1:
+    if len(usersB) >= 1:
         for u in usersB:
             results.append(u.iduser)
     else:
         msg = "There is no users"
-        return jsonify(msg)
-    
-    if routeRequest is not None:
-        return jsonify(results)
-    else:
+        print(msg)
         return results
+    return results
 
 def getNumBuyOfProduct(idproduct, routeRequest=None):
     numCount = 0
@@ -161,6 +171,7 @@ def buyProducts(client, product, numofprod):
     models.db.session.add(purchase)
     models.db.session.commit()
     return jsonify("The client {} has bought the product with id: {}".format(client, product))
+
 
 
 ### end functions for model userbuyproduct 
@@ -215,3 +226,9 @@ def registerNewUser(mail, name, surname, birthdate, password, routeRequest=None)
     models.db.session.add(newUser)
     models.db.session.commit()
     return jsonify("Grande sei registrato!")
+
+
+def getAllUsers(routeRequest=None):
+    rs = models.user.query.all()
+    results = []
+    return jsonify(results)
