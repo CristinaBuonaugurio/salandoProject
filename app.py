@@ -1,23 +1,42 @@
 from databaseFolder import models, functionModels
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, redirect, url_for
 from flask_migrate import Migrate
 from ml import tf_idf as t
 from datetime import datetime
-app = Flask(__name__) #create a flask application
+from flask_cors import CORS
 
+app = Flask(__name__, instance_relative_config=True) #create a flask application
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Cristina@localhost:5432/salando'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 models.db.init_app(app)
 migrate = Migrate(app, models.db)
 
+###CORS HEADERS
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers','Content-Type Authorization, true')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, DELETE, OPTIONS')
+    return response
+
+
 @app.route('/')
 def main_page():
     return t.method()
 
+@app.route('/shop')
+def shop():
+    return jsonify("This is the shop")
+
 @app.route('/products', methods = ['GET'])
 def products():
-    return functionModels.getAllProducts('route')
+    products = models.product.query.all()
+    formatted_products = [p.format() for p in products ]
+    return jsonify({
+        'success' : True,
+        'products'  : formatted_products
+    })
 
 @app.route('/categories', methods = ['GET'])
 def categories():
@@ -27,3 +46,117 @@ def categories():
 def getProductByCategory(id_category):
     return functionModels.getProductsByCategory(id_category,'route')
     
+
+@app.route('/registration', methods = ['POST'])
+def registrationUser():
+    body = request.get_json()
+
+    mail = body.get('mail')
+    name = body.get('name')
+    surname = body.get('surname')
+    birthdate = body.get('birthdate')
+    password = body.get('password')
+
+    newuser = models.user(idmail=mail, name=name, surname=surname,birthdate= birthdate, password=password)
+
+    try: 
+        models.db.session.add(newuser)
+        models.db.session.commit()
+        return jsonify({
+            'success' : True
+        })
+    except:
+        models.db.session.rollback()
+        abort(500)
+    finally:
+        models.db.session.close()
+
+
+@app.route('/login/<isUser>', methods = ['GET'])
+def login(isUser):
+    body = request.get_json()
+    mail = body.get('mail')
+    password = body.get('password')
+    
+    if isUser == 'client':
+        ###Let's see if there is an user with that mail
+        try:
+            result = models.user.query.get(mail)
+            if result is not None:
+                if result.compare(password):
+                    return jsonify({
+                        "success" : True
+                    })
+                else:
+                    return jsonify({
+                        "success" : False
+                    })
+            else:
+                return jsonify({
+                        "success" : False
+                    })
+        except:
+            models.db.session.rollback()
+        finally:
+            models.db.session.close()
+    
+    
+    else:
+        ###It's an amministrator of the shop
+        try:
+            result = models.admin.query.get(mail)
+            if result is not None:
+                if result.compare(password):
+                    return jsonify({
+                        "success" : True
+                    })
+                else:
+                    return jsonify({
+                        "success" : False
+                    })
+            else:
+                return jsonify({
+                        "success" : False
+                    })
+        except:
+            models.db.session.rollback()
+        finally:
+            models.db.session.close()
+
+
+
+
+@app.route('/amministration/products', methods = ['POST'])
+def createProduct():
+    body = request.get_json()
+
+    name = body.get('name')
+    description = body.get('description')
+    cost = int(body.get('cost'))
+    quantity = int(body.get('quantity'))
+    category = int(body.get('category'))
+    newproduct = models.product(name=name, description=description, cost=cost, quantity=quantity, idcategory=category)
+    try:
+        models.db.session.add(newproduct)
+        models.db.session.commit()
+        return jsonify({
+            'success' : True
+        })
+    except:
+        models.db.session.rollback()
+        abort(500)
+    finally:
+        models.db.session.close()
+
+
+
+
+### Following error handling
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return jsonify({
+        "success" : False,
+        "error" : 500, 
+        "message" : "Couldn't process the request"
+    }), 500

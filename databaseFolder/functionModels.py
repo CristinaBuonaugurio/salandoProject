@@ -84,19 +84,6 @@ def getProductsByCategory(idcategory, routeRequest=None):
     else:
         return results 
 
-def insertNewProduct(name, description, category, cost, quantity=1, routeRequest=None):
-    errore = False
-    try:
-        p = models.product(name=name, description=description, cost=cost, quantity=quantity, idcategory=category)
-        models.db.session.add(p)
-        models.db.session.commit()
-    except:
-        error = True
-        models.db.session.rollback()
-    finally:
-        models.db.session.close()
-
-
 
 def updateQuantityProduct(idproduct, quantityUpdate, routeRequest=None):
     if quantityUpdate > 0:
