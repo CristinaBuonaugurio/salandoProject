@@ -27,7 +27,9 @@ def main_page():
 
 @app.route('/shop')
 def shop():
-    return render_template("shop.html")
+    products = models.product.query.order_by(models.product.idcategory).all()
+    formatted_products = [p.format() for p in products ]
+    return render_template("shop.html", data=formatted_products)
 
 @app.route('/products', methods = ['GET'])
 def products():
@@ -47,10 +49,14 @@ def getProductByCategory(id_category):
     return functionModels.getProductsByCategory(id_category,'route')
     
 
-@app.route('/registration', methods = ['POST'])
+@app.route('/registration')
+def mainRegistration():
+    return render_template('registration.html')
+
+
+@app.route('/registrationForm', methods = ['POST'])
 def registrationUser():
     body = request.get_json()
-
     mail = body.get('mail')
     name = body.get('name')
     surname = body.get('surname')
@@ -58,7 +64,7 @@ def registrationUser():
     password = body.get('password')
 
     newuser = models.user(idmail=mail, name=name, surname=surname,birthdate= birthdate, password=password)
-
+    print(newuser)
     try: 
         models.db.session.add(newuser)
         models.db.session.commit()
@@ -72,8 +78,8 @@ def registrationUser():
         models.db.session.close()
 
 
-@app.route('/login', methods = ['GET'])
-def login(isUser):
+@app.route('/login', methods = ['POST'])
+def login():
     body = request.get_json()
     mail = body.get('mail')
     password = body.get('password')
@@ -83,7 +89,10 @@ def login(isUser):
         result = models.user.query.get(mail)
         if result is not None:
             if result.compare(password):
-                return redirect(url_for('shop'))
+                return jsonify({
+                    "success" : True,
+                    "mail" : mail
+                })
             else:
                 return jsonify({
                     "success" : False
