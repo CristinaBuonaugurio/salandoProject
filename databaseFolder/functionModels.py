@@ -36,7 +36,6 @@ def getCategory(id, routeRequest = None):
 ###
 ### begin functions for model product
 
-
 def getAllProducts(routeRequest = None):
     products = models.product.query.all()
     results = []
@@ -85,16 +84,30 @@ def getProductsByCategory(idcategory, routeRequest=None):
         return results 
 
 
-def updateQuantityProduct(idproduct, quantityUpdate, routeRequest=None):
-    if quantityUpdate > 0:
-        models.db.session.query(models.product).filter_by(id=idproduct).update({'quantity': quantityUpdate})
-        models.db.session.commit()
-    return jsonify("Updated quantity.")
+def updateQuantityProduct(idproduct, quantityUpdate):
+    status = False
+    try:
+        if quantityUpdate >= 0:
+            models.db.session.query(models.product).filter_by(id=idproduct).update({'quantity': quantityUpdate})
+            models.db.session.commit()
+            status = True
+    except:
+        models.db.session.rollback()
+    finally:
+        models.db.session.close()
+    return status
 
-def updateDescriptionProduct(idproduct, description, routeRequest=None):
-    models.db.session.query(models.product).filter_by(id=idproduct).update({'description': description})
-    models.db.session.commit()
-    return jsonify("Updated description for product with id: {}".format(idproduct))
+def updateDescriptionProduct(idproduct, description):
+    status = False
+    try:
+        models.db.session.query(models.product).filter_by(id=idproduct).update({'description': description})
+        models.db.session.commit()
+        status = True
+    except:
+        models.db.session.rollback()
+    finally:
+        models.db.session.close()
+    return status
 
 
 ### end functions for model product 
@@ -102,7 +115,7 @@ def updateDescriptionProduct(idproduct, description, routeRequest=None):
 ###
 ### begin functions for model userbuyproduct
 
-def getBuyProductsByUsers(client, routeRequest=None):
+def getBuyProductsByUsers(client):
     productsB = models.userBuyProduct.query.filter_by(iduser=client).all()
     dict = {}
     if len(productsB) >= 1:

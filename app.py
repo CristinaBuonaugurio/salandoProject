@@ -1,5 +1,5 @@
 from databaseFolder import models, functionModels
-from flask import Flask, jsonify, request, redirect, url_for
+from flask import Flask, jsonify, request, redirect, url_for, render_template
 from flask_migrate import Migrate
 from ml import tf_idf as t
 from datetime import datetime
@@ -23,11 +23,11 @@ def after_request(response):
 
 @app.route('/')
 def main_page():
-    return t.method()
+    return render_template('login.html')
 
 @app.route('/shop')
 def shop():
-    return jsonify("This is the shop")
+    return render_template("shop.html")
 
 @app.route('/products', methods = ['GET'])
 def products():
@@ -72,56 +72,30 @@ def registrationUser():
         models.db.session.close()
 
 
-@app.route('/login/<isUser>', methods = ['GET'])
+@app.route('/login', methods = ['GET'])
 def login(isUser):
     body = request.get_json()
     mail = body.get('mail')
     password = body.get('password')
     
-    if isUser == 'client':
-        ###Let's see if there is an user with that mail
-        try:
-            result = models.user.query.get(mail)
-            if result is not None:
-                if result.compare(password):
-                    return jsonify({
-                        "success" : True
-                    })
-                else:
-                    return jsonify({
-                        "success" : False
-                    })
+    ###Let's see if there is an user with that mail
+    try:
+        result = models.user.query.get(mail)
+        if result is not None:
+            if result.compare(password):
+                return redirect(url_for('shop'))
             else:
                 return jsonify({
-                        "success" : False
-                    })
-        except:
-            models.db.session.rollback()
-        finally:
-            models.db.session.close()
-    
-    
-    else:
-        ###It's an amministrator of the shop
-        try:
-            result = models.admin.query.get(mail)
-            if result is not None:
-                if result.compare(password):
-                    return jsonify({
-                        "success" : True
-                    })
-                else:
-                    return jsonify({
-                        "success" : False
-                    })
-            else:
-                return jsonify({
-                        "success" : False
-                    })
-        except:
-            models.db.session.rollback()
-        finally:
-            models.db.session.close()
+                    "success" : False
+                })
+        else:
+            return jsonify({
+                    "success" : False
+                })
+    except:
+        models.db.session.rollback()
+    finally:
+        models.db.session.close()
 
 
 
@@ -149,7 +123,34 @@ def createProduct():
         models.db.session.close()
 
 
+@app.route('/amministration/products/description/<idProduct>', methods = ['POST'])
+def updateDescription(idProduct):
+    id = int(idProduct)
+    newdescription = request.get_json()['description']
+    status = functionModels.updateDescriptionProduct(id, newdescription)
+    if status:
+        return jsonify({
+            "success" : True
+        })
+    else:
+        return jsonify({
+            "success" : False
+        }) 
 
+
+@app.route('/amministration/products/quantity/<idProduct>', methods = ['POST'])
+def updateQuantity(idProduct):
+    id = int(idProduct)
+    newquantity = int(request.get_json()['quantity'])
+    status = functionModels.updateQuantityProduct(id, newquantity)
+    if status:
+        return jsonify({
+            "success" : True
+        })
+    else:
+        return jsonify({
+            "success" : False
+        })
 
 ### Following error handling
 
