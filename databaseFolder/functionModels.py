@@ -115,7 +115,7 @@ def updateDescriptionProduct(idproduct, description):
 ###
 ### begin functions for model userbuyproduct
 
-def getBuyProductsByUsers(client):
+def getBuyProductsByUsers(client, routeRequest=None):
     productsB = models.userBuyProduct.query.filter_by(iduser=client).all()
     dict = {}
     if len(productsB) >= 1:

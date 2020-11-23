@@ -31,6 +31,10 @@ def shop():
     formatted_products = [p.format() for p in products ]
     return render_template("shop.html", data=formatted_products)
 
+@app.route('/magazine')
+def magazine_page():
+    return render_template('magazine.html')
+
 @app.route('/products', methods = ['GET'])
 def products():
     products = models.product.query.all()
@@ -91,16 +95,26 @@ def login():
             if result.compare(password):
                 return jsonify({
                     "success" : True,
-                    "mail" : mail
+                    "mail" : mail, 
+                    "role" : "client"
                 })
             else:
                 return jsonify({
                     "success" : False
                 })
         else:
-            return jsonify({
-                    "success" : False
-                })
+            result = models.admin.query.get(mail)
+            if result is not None:
+                if result.compare(password):
+                    return jsonify({
+                        "success" : True,
+                        "mail" : mail,
+                        "role" : "admin"
+                    })
+                else:
+                    return jsonify({
+                        "success" : False
+                    })
     except:
         models.db.session.rollback()
     finally:

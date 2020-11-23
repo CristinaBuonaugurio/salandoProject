@@ -139,8 +139,13 @@
                 if(jsonResponse.success == true)
                 {
                     alert("You have successfully logged!")
-                    sessionStorage.setItem('currentUser', jsonResponse.mail); 
-                    window.location.href = '/shop'; 
+                    if(jsonResponse.role == "admin"){
+                        window.location.href = '/magazine'; 
+                    }
+                    else{
+                        sessionStorage.setItem('currentUser', jsonResponse.mail); 
+                        window.location.href = '/shop'; 
+                    }   
                 }
             })
             };

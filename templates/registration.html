@@ -148,6 +148,14 @@
             const surname = document.getElementById('surnameUser').value;
             const birthdate = document.getElementById('birth').value;
             const password = document.getElementById('pass').value;
+            
+            if(mail.length > 30)
+                mail = mail.substring(0,30); 
+            if(name.length > 20)
+                name = name.substring(0,20); 
+            if(surname.length > 30)
+                surname = surname.substring(0,30);
+
             console.log(mail);
             fetch('/registrationForm', {
                 method: 'POST',

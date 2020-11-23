@@ -89,8 +89,7 @@ class admin(db.Model):
     birthdate = db.Column(db.Date, nullable=True)
     password = db.Column(db.LargeBinary(), nullable=False)
 
-
-    def __init__(idmail,name,surname,birthdate,password):
+    def __init__(self, idmail, name, surname, birthdate, password):
         self.idmail = idmail
         self.name = name
         self.surname = surname
