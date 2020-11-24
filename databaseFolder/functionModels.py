@@ -84,6 +84,25 @@ def getProductsByCategory(idcategory, routeRequest=None):
         return results 
 
 
+def updateQuantity(value):
+    status = False
+    try: 
+        product = models.product.get(value.key)
+        currentq = product.quantity
+        updatedq = currentq - value.item
+        product.quantity = updatedq
+        models.db.session.commit()
+        status = True
+    except:
+        models.db.session.rollback()
+    finally:
+        models.db.session.close()
+    
+    return status
+
+
+
+### The following method is for the admin of the shop
 def updateQuantityProduct(idproduct, quantityUpdate):
     status = False
     try:
@@ -179,20 +198,14 @@ def buyProducts(client, product, numofprod):
 ###
 ### begin functions for model coupon
 
-def checkCoupon(iduser, routeRequest=None):
+def checkCoupon(iduser):
     rs = models.coupon.query.filter_by(iduser=iduser).first()
     results = []
     if rs is not None:
         results.append(rs.id)
         results.append(r.idcategory)
     else:
-        msg = "There is none."
-        return jsonify(msg)
-    
-    if routeRequest is not None:
-        return jsonify(results)
-    else:
-        return results
+        return None
 
 def insertCoupon(idcategory, iduser, routeRequest=None):
     rs = models.coupon.query.filter_by(iduser=iduser).first()

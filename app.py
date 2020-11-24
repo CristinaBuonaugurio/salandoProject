@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from ml import tf_idf as t
 from datetime import datetime
 from flask_cors import CORS
+import purchaseManagement 
 
 app = Flask(__name__, instance_relative_config=True) #create a flask application
 CORS(app)
@@ -25,10 +26,14 @@ def after_request(response):
 def main_page():
     return render_template('login.html')
 
+
 @app.route('/shop')
 def shop():
     products = models.product.query.order_by(models.product.idcategory).all()
     formatted_products = [p.format() for p in products ]
+    cli = currentUser("stina@mail.it")
+    cli.addProduct(1, 3)
+
     return render_template("shop.html", data=formatted_products)
 
 @app.route('/magazine')
@@ -44,6 +49,12 @@ def products():
         'products'  : formatted_products
     })
 
+@app.route('/shop/cart', methods = ['GET'])
+def getshoppingcart():
+    body = request.get_json()
+    mail = body.get['mail']
+
+
 @app.route('/categories', methods = ['GET'])
 def categories():
     return functionModels.getCategories('route')
@@ -56,6 +67,7 @@ def getProductByCategory(id_category):
 @app.route('/registration')
 def mainRegistration():
     return render_template('registration.html')
+
 
 
 @app.route('/registrationForm', methods = ['POST'])

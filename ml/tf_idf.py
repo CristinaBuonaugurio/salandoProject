@@ -5,7 +5,6 @@ def method():
     calcute_tfidf()
     return jsonify("Sto a fare il tf_idf")
 
-
 def calcute_tfidf():
     distinctClients = f.getClients()  ### get distinct clients, meaning only the users that have bought at least one product
     clientsPerProducts = {}  ### Create a dictionary that it will contain as key a client and as value another dictionary
