@@ -86,11 +86,17 @@ def getProductsByCategory(idcategory, routeRequest=None):
 
 def updateQuantity(value):
     status = False
-    try: 
-        product = models.product.get(value.key)
-        currentq = product.quantity
-        updatedq = currentq - value.item
-        product.quantity = updatedq
+    try:
+        print("Sono nell'updatequantity")
+        idproduct = list(value.keys())[0] 
+        quantity = value[idproduct]
+        print("Im before the first query")
+        p = models.product.query.filter_by(id=idproduct).first()
+        currentq = p.quantity
+        print(p)
+        
+        updatedq = currentq - quantity
+        models.db.session.query(models.product).filter_by(id=idproduct).update({'quantity': updatedq})
         models.db.session.commit()
         status = True
     except:
@@ -185,8 +191,8 @@ def getNumBuyOfProduct(idproduct, routeRequest=None):
     else:
         return results
 
-def buyProducts(client, product, numofprod):
-    purchase = models.userBuyProduct(id=random.randint(0,10000),iduser=client, idproduct = product, numofprod =numofprod)
+def buyProducts(client, product, numofprod, methodofpayment):
+    purchase = models.userBuyProduct(id=random.randint(0,10000),iduser=client, idproduct = product, numofprod =numofprod, methodofpayment=methodofpayment)
     models.db.session.add(purchase)
     models.db.session.commit()
     return jsonify("The client {} has bought the product with id: {}".format(client, product))

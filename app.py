@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from ml import tf_idf as t
 from datetime import datetime
 from flask_cors import CORS
-import purchaseManagement 
+from purchaseManagement import client
 
 app = Flask(__name__, instance_relative_config=True) #create a flask application
 CORS(app)
@@ -27,13 +27,10 @@ def main_page():
     return render_template('login.html')
 
 
-@app.route('/shop')
+@app.route('/shop', methods = ['GET'])
 def shop():
     products = models.product.query.order_by(models.product.idcategory).all()
     formatted_products = [p.format() for p in products ]
-    cli = currentUser("stina@mail.it")
-    cli.addProduct(1, 3)
-
     return render_template("shop.html", data=formatted_products)
 
 @app.route('/magazine')

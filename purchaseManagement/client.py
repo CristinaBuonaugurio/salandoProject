@@ -1,21 +1,22 @@
-import purchaseManagement
+from purchaseManagement import purchase
 
 
 
 class currentUser:
+
     def __init__(self, idmail):
         self.idmail = idmail
-        self.templateacquisto = templateAcquisto()
-        self.manager = cartManager(templateacquisto, idmail)
-
+        self.templateacquisto = purchase.templateAcquisto()
+        self.manager = purchase.cartManager(templateAcquisto=self.templateacquisto, cliente=self.idmail)
 
     def getCarts():
-        return manager.getCarts()  
+        return self.manager.getCarts()  
 
-    def addProduct(idproduct, numofprod): 
+    def addProduct(self, idproduct, numofprod): 
+        dict = {}
         dict[idproduct] = numofprod
-        manager.add(dict)
+        self.manager.add(value=dict)
 
-    def purchase():
-        manager.executeAll()
+    def definitivepurchase(self) -> None:
+        self.manager.executeAll()
     
