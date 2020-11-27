@@ -2,57 +2,168 @@
 <style>
     @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-
-    .parent {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 30px;
-    grid-row-gap: 56px;
-    justify-content: space-evenly;
+    .hidden{
+        display: none;
     }
 
-    .div1 { grid-area: 1 / 1 / 2 / 2; }
-    .div2 { grid-area: 1 / 2 / 2 / 3; }
-    .div3 { grid-area: 1 / 3 / 2 / 4; }
-    .div4 { grid-area: 2 / 1 / 3 / 4; }
-
-    .container {
-        position: relative;
-        z-index: 3;
-        max-width: 500px;
-        margin: 0 auto;
-        background-color: #FFFFFF;
-        padding: 2%;
+    .top-nav-bar {
+        background: #ffffff;
+        height: 57px;
+        top: 0;
+        position: sticky;
+        margin-bottom: 20px;
+        border-top: 3px solid #E9967A;
+        border-left: 3px solid #E9967A;
     }
 
-    .container .info {
-        margin: 50px auto;
-        text-align: center;
+    .left-nav-bar {
+        background: #ffffff;
+        width: 20%;
+        height: 70%;
+        left: 0;
+        position: sticky;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #E9967A;
+        border-left: 3px solid #E9967A;
     }
-    .container .productButton {
+
+    .logo-profile {
+        height: 40px;
+        margin: 10px 10px;
+        float: right;
+        cursor: pointer;
+    }
+
+    .logo-cart {
+        height: 40px;
+        margin: 10px 10px;
+        float: right;
+        cursor: pointer;
+    }
+
+    .side-menu {
+        height: 80%;
+        width: 15%;
+        float: left;
+        z-index: 2;
+        background-color: white;
+        border-left: 3px solid #E9967A;
+        border-bottom: 3px solid #E9967A;
+
+    }
+
+    .titleText {
+        font-family: "Roboto", sans-serif;
+        letter-spacing: 1px;
+        font-weight: 550;
+        text-shadow: -2px 2px 15px #FFDAB9;
+        font-size: medium;
+        float: left;
+        padding: 5px;
+    }
+
+    .productButton {
         font-family: "Roboto", sans-serif;
         text-transform: uppercase;
         outline: 0;
         background: #E9967A;
-        width: 30%;
+        width: 100px;
         border: 0;
-        padding: 10px;
+        padding: 5px;
         color: #FFFFFF;
         font-size: 10px;
         -webkit-transition: all 0.3 ease;
         transition: all 0.3 ease;
+        margin-bottom: 10px;
+        cursor: pointer;
+
+    }
+
+    .catButton {
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #E9967A;
+        width: 70%;
+        border: 0;
+        padding: 20px;
+        color: #FFFFFF;
+        font-size: 10px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        margin-bottom: 10px;
         cursor: pointer;
     }
 
-    .container .productButton:hover {
-        background:linear-gradient(to bottom, #493933 5%, #493933 100%);
-	    background-color:#493933;
+    .productButton:hover {
+        background: linear-gradient(to bottom, #493933 5%, #493933 100%);
+        background-color: #493933;
     }
 
-    .container .productButton:active {
+    .catButton:hover {
+        background: linear-gradient(to bottom, #493933 5%, #493933 100%);
+        background-color: #493933;
+    }
+
+    .productButton:active {
         position: relative;
         top: 1px;
+    }
+
+    .catButton:active {
+        position: relative;
+        top: 1px;
+    }
+
+    .products {
+        position: sticky;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center; 
+    }
+
+     .container{
+        width:191px !important; width /**/:200px;
+        height:180px !important; height /**/: 130px;
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center; 
+        background-color: #fdf1ed;
+        margin: 15px;
+        border: 1px solid #d5a696; 
+        border-radius: 5px;
+        text-align: center;
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        font-size: 20px;
+        box-shadow: 8px 5px 7px 5px rgba(0, 0, 0, 0.14);
+
+    }
+    
+    .section-products{
+        overflow: scroll;
+        background: #ffffff;
+        width: 80%;
+        height: 80%;
+        right: 0;
+        position: sticky;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #E9967A;
+        border-right: 3px solid #E9967A;
+        float: right;
+        z-index: 3; 
+        word-break: keep-all;   
+    }
+
+    .descriptionProduct{
+        font-size: 10px;
+        background-color: white;
+        width: 100%;
+        height: 30%;
     }
 
     body {
@@ -69,44 +180,74 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
+
+    @media only screen and (max-width: 980px; ) {
+        .top-nav-bar {
+            height: 118px;
+            border-bottom: 0;
+        }
+
+        .side-menu {
+            height: 40px;
+            width: 40px;
+        }
+    }
 </style>
 
 <head>
-    <title> Salando - Your favorite shop! </title>
+    <title> Salando </title>
 </head>
 
 <body>
-
-    <div class="parent">
-        <div class="div1"> 
-            <div class="container">
-                I'm the third column
-            </div> 
+    <div class="top-nav-bar">
+        <h1 class="titleText">Salando, the online shop just for <i>you</i>! </h1>
+        <div class="profile">
+            <img src="{{url_for('static', filename='id-card.png')}}" class="logo-profile" />
+            
         </div>
+            <div class="cart">
+                <img src="{{url_for('static', filename='shopping-cart.png')}}" class="logo-cart" />
+            </div>
         
-        <div class="div2"> 
-            <div class="container">
-            <ul id="products">
-                {% for p in data %}
-                    {{ p.name }}
-                <button class="productButton" data-id={{p.id}}> add to cart </button>
-                {% endfor %}
-            </ul> 
-        </div>
     </div>
-
-        <div class="div3"> <div class="container">
-            I'm td column
-        </div>  </div>
-        <div class="div4"> 
-            <div class="container">
-                beh
-            </div>  </div>
+    <section class="header">
+        <div class="side-menu">
+            <ul style="list-style:none;">
+                <li><button class="catButton"> clothes</button> </li>
+                <li><button class="catButton"> games</button> </li>
+                <li><button class="catButton"> shoes</button> </li>
+                <li><button class="catButton"> forniture</button> </li>
+                <li><button class="catButton"> make up</button> </li>
+                <li><button class="catButton"> gardening</button> </li>
+                <li><button class="catButton"> electronics</button> </li>
+            </ul>
         </div>
+    </section>
 
-    
-    
+    <section class="section-products">
+        <div class="products">
+                {% for d in data %}
+                <div class="container">
+                    {{d.name}}
+                        <div class="descriptionProduct">
+                            {{d.description}}
+                            <div class="quantityProduct">
+                                <button class="productButton" title="add to cart">add to cart</button>
+                            </div>
+                        </div>   
+                </div>
+                {% endfor %}
+        </div>
+    </section>
 </body>
+
+
+
+
+
+
+
+
 <script>
 
 
