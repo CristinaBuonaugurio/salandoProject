@@ -14,6 +14,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 models.db.init_app(app)
 migrate = Migrate(app, models.db)
 
+currentClientLogged = None
+
 ###CORS HEADERS
 @app.after_request
 def after_request(response):
@@ -48,8 +50,12 @@ def products():
 
 @app.route('/shop/cart', methods = ['GET'])
 def getshoppingcart():
-    body = request.get_json()
-    mail = body.get['mail']
+    if isinstance(currentClientLogged, client.currentUser):
+        items = currentClientLogged.getCarts()
+    else:
+        items = {}
+        items['countItem'] = 0
+    return render_template('cart.html', data=items)
 
 
 @app.route('/categories', methods = ['GET'])
@@ -65,6 +71,14 @@ def getProductByCategory(id_category):
 def mainRegistration():
     return render_template('registration.html')
 
+
+@app.route('/shop/<idproduct>/add', methods = ['POST'])
+def addProduct(idproduct): 
+    body = request.get_json()
+    mailClient = body.get('mail')
+    numberOfItem = int(body.get('quantity'))
+    idItem = idproduct
+    currentClientLogged.addProduct(idproduct = idItem, numofprod=numberOfItem)
 
 
 @app.route('/registrationForm', methods = ['POST'])
@@ -102,6 +116,7 @@ def login():
         result = models.user.query.get(mail)
         if result is not None:
             if result.compare(password):
+                currentClientLogged = client.currentUser(mail=mail)
                 return jsonify({
                     "success" : True,
                     "mail" : mail, 

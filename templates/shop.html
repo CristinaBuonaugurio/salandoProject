@@ -2,7 +2,7 @@
 <style>
     @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-    .hidden{
+    .hidden {
         display: none;
     }
 
@@ -121,20 +121,26 @@
         justify-content: flex-start;
         flex-wrap: wrap;
         flex-direction: row;
-        align-items: center; 
+        align-items: center;
     }
 
-     .container{
-        width:191px !important; width /**/:200px;
-        height:180px !important; height /**/: 130px;
+    .container {
+        width: 191px !important;
+        width
+        /**/
+        : 200px;
+        height: 180px !important;
+        height
+        /**/
+        : 130px;
         display: flex;
         justify-content: flex-end;
         flex-wrap: wrap;
         flex-direction: column;
-        align-items: center; 
+        align-items: center;
         background-color: #fdf1ed;
         margin: 15px;
-        border: 1px solid #d5a696; 
+        border: 1px solid #d5a696;
         border-radius: 5px;
         text-align: center;
         font-family: "Roboto", sans-serif;
@@ -143,8 +149,8 @@
         box-shadow: 8px 5px 7px 5px rgba(0, 0, 0, 0.14);
 
     }
-    
-    .section-products{
+
+    .section-products {
         overflow: scroll;
         background: #ffffff;
         width: 80%;
@@ -155,15 +161,77 @@
         border-bottom: 3px solid #E9967A;
         border-right: 3px solid #E9967A;
         float: right;
-        z-index: 3; 
-        word-break: keep-all;   
+        z-index: 3;
+        word-break: keep-all;
     }
 
-    .descriptionProduct{
+    .descriptionProduct {
         font-size: 10px;
         background-color: white;
         width: 100%;
         height: 30%;
+    }
+
+    .modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #cccccc6e;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 1rem 1.5rem;
+        width: 24rem;
+        border: 1px solid #493933;
+        color :white;
+        text-shadow: none;
+        color : #493933;
+    }
+
+    .close-button {
+        float: right;
+        width: 3rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        background-color: #e2b09f;
+    }
+
+    .close-button:hover {
+        background-color: #493933c5;
+    }
+
+    .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    }
+
+    .confirmButton{
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        background-color: #e2b09f;
+        border:none; 
+        text-transform: uppercase;
+        color:white;
+        font-family: "Roboto", sans-serif;
+    }
+
+    .confirmButton:hover{    
+        background-color: #493933c5;
     }
 
     body {
@@ -181,15 +249,20 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
-    @media only screen and (max-width: 980px; ) {
+    @media only screen and (max-width: 980px) {
         .top-nav-bar {
-            height: 118px;
+            height: 108px;
             border-bottom: 0;
         }
 
         .side-menu {
-            height: 40px;
-            width: 40px;
+
+            width: 100px;
+        }
+
+        .catButton {
+            height: 20px;
+            width: 20px;
         }
     }
 </style>
@@ -202,13 +275,13 @@
     <div class="top-nav-bar">
         <h1 class="titleText">Salando, the online shop just for <i>you</i>! </h1>
         <div class="profile">
-            <img src="{{url_for('static', filename='id-card.png')}}" class="logo-profile" />
-            
+            <input type="image" src="{{url_for('static', filename='id-card.png')}}" class="logo-profile" />
+
         </div>
-            <div class="cart">
-                <img src="{{url_for('static', filename='shopping-cart.png')}}" class="logo-cart" />
-            </div>
-        
+        <div class="cart">
+            <input type="image" src="{{url_for('static', filename='shopping-cart.png')}}" class="logo-cart" onclick="location.href='/shop/cart';"/>
+        </div>
+
     </div>
     <section class="header">
         <div class="side-menu">
@@ -226,31 +299,27 @@
 
     <section class="section-products">
         <div class="products">
-                {% for d in data %}
-                <div class="container">
-                    {{d.name}}
-                        <div class="descriptionProduct">
-                            {{d.description}}
-                            <div class="quantityProduct">
-                                <button class="productButton" title="add to cart">add to cart</button>
+            {% for d in data %}
+            <div class="container">
+                {{d.name}}
+                <div class="descriptionProduct">
+                    {{d.description}}
+                    <div class="quantityProduct">
+                        <button class="productButton" data-id="{{ d.id }}" title="add to cart">add to cart</button>
+                        <div class="modal">
+                            <div class="modal-content">
+                                <span class="close-button">&times;</span>
+                                <h2>Choose the desired quantity: </h2>
+                                <input type="number" id="numOfProduct" min="1" max="3">
+                                <button class="confirmButton"> Confirm </button>
                             </div>
-                        </div>   
+                        </div>
+                    </div>
                 </div>
-                {% endfor %}
+            </div>
+            {% endfor %}
         </div>
     </section>
 </body>
-
-
-
-
-
-
-
-
-<script>
-
-
-</script>
-
+<script src="{{url_for('static', filename='shop.js')}}"></script>
 </html>
