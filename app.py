@@ -1,5 +1,5 @@
 from databaseFolder import models, functionModels
-from flask import Flask, jsonify, request, redirect, url_for, render_template
+from flask import Flask, jsonify, request, redirect, url_for, render_template, session
 from flask_migrate import Migrate
 from ml import tf_idf as t
 from datetime import datetime
@@ -14,7 +14,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 models.db.init_app(app)
 migrate = Migrate(app, models.db)
 
-currentClientLogged = None
+global currentClientLogged 
+
 
 ###CORS HEADERS
 @app.after_request
@@ -50,6 +51,7 @@ def products():
 
 @app.route('/shop/cart', methods = ['GET'])
 def getshoppingcart():
+    global currentClientLogged
     if isinstance(currentClientLogged, client.currentUser):
         items = currentClientLogged.getCarts()
     else:
@@ -72,13 +74,17 @@ def mainRegistration():
     return render_template('registration.html')
 
 
-@app.route('/shop/<idproduct>/add', methods = ['POST'])
-def addProduct(idproduct): 
+@app.route('/shop/add', methods = ['POST'])
+def addProduct(): 
+    global currentClientLogged
     body = request.get_json()
     mailClient = body.get('mail')
-    numberOfItem = int(body.get('quantity'))
-    idItem = idproduct
-    currentClientLogged.addProduct(idproduct = idItem, numofprod=numberOfItem)
+    idproduct = int(body.get('id'))
+    numofprod = int(body.get('numOfProd'))    
+    currentClientLogged.addProduct(idproduct = idproduct, numofprod=numofprod)
+    return jsonify({
+        'success' : 'i guess'
+    })
 
 
 @app.route('/registrationForm', methods = ['POST'])
@@ -110,13 +116,14 @@ def login():
     body = request.get_json()
     mail = body.get('mail')
     password = body.get('password')
-    
+    global currentClientLogged
     ###Let's see if there is an user with that mail
     try:
         result = models.user.query.get(mail)
         if result is not None:
             if result.compare(password):
-                currentClientLogged = client.currentUser(mail=mail)
+                currentClientLogged = client.currentUser(idmail=mail)
+            
                 return jsonify({
                     "success" : True,
                     "mail" : mail, 

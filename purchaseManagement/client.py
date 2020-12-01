@@ -1,7 +1,5 @@
 from purchaseManagement import purchase
 
-
-
 class currentUser:
 
     def __init__(self, idmail):
@@ -9,7 +7,7 @@ class currentUser:
         self.templateacquisto = purchase.templateAcquisto()
         self.manager = purchase.cartManager(templateAcquisto=self.templateacquisto, cliente=self.idmail)
 
-    def getCarts():
+    def getCarts(self):
         return self.manager.getCarts()  
 
     def addProduct(self, idproduct, numofprod): 

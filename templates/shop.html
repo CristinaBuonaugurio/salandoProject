@@ -219,20 +219,6 @@
         transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
     }
 
-    .confirmButton{
-        line-height: 1.5rem;
-        text-align: center;
-        cursor: pointer;
-        background-color: #e2b09f;
-        border:none; 
-        text-transform: uppercase;
-        color:white;
-        font-family: "Roboto", sans-serif;
-    }
-
-    .confirmButton:hover{    
-        background-color: #493933c5;
-    }
 
     body {
         background: #e2b09f;
@@ -269,6 +255,7 @@
 
 <head>
     <title> Salando </title>
+    <link rel="shortcut icon" href="#" />
 </head>
 
 <body>
@@ -300,18 +287,16 @@
     <section class="section-products">
         <div class="products">
             {% for d in data %}
-            <div class="container">
+            <div class="container" data-idproduct="{{d.idproduct}}" >
                 {{d.name}}
                 <div class="descriptionProduct">
-                    {{d.description}}
+                    {{d.description}} 
                     <div class="quantityProduct">
-                        <button class="productButton" data-id="{{ d.id }}" title="add to cart">add to cart</button>
-                        <div class="modal">
-                            <div class="modal-content">
+                        <button class="productButton" data-idproduct="{{d.idproduct}}" title="add to cart">add to cart</button>
+                        <div class="modal" >
+                            <div class="modal-content"  >
                                 <span class="close-button">&times;</span>
-                                <h2>Choose the desired quantity: </h2>
-                                <input type="number" id="numOfProduct" min="1" max="3">
-                                <button class="confirmButton"> Confirm </button>
+                                <h2> Successfully added to your Cart!</h2>
                             </div>
                         </div>
                     </div>

@@ -54,6 +54,9 @@ class concreteCart(InterfaceCart):
 
     def confermaOrdine(self):
         self.templateAcquisto.commitPurchase(self.cliente, self.value)
+    
+    def getValue(self): 
+        return self.value
 
 
 class cartManager:
@@ -75,4 +78,9 @@ class cartManager:
     
     def remove(value):
         self.listOfCarts.remove(value)
+
+    def getCarts(self): 
+        carts = [cart.getValue() for cart in self.listOfCarts]
+        ###print(carts)
+        return carts
 

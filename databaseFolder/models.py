@@ -20,7 +20,7 @@ class product(db.Model):
 
     def format(self):
         return {
-            'id' : self.id,
+            'idproduct' : self.id,
             'name' : self.name,
             'description' : self.description,
             'cost' : self.cost,
