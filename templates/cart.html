@@ -1,54 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-    <title>
-        Salando - Your favorite shop!
-    </title>
-    <style>
+<title>
+    Salando - Your favorite shop!
+</title>
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-        .cart{
-            background: white;
-            border : 1px solid #efbaa8; 
-            z-index: 1;
-            width: 60%;
-            border: 5px solid #e2b09f;
-            padding: 10px;
-            margin: auto;
-            top: 50%;
-            left: 50%;
-            
-        }
+    .cart {
+        background: white;
+        border: 1px solid #efbaa8;
+        z-index: 1;
+        width: 60%;
+        border: 5px solid #e2b09f;
+        padding: 10px;
+        margin: auto;
+        top: 50%;
+        left: 50%;
+        font-size:large;
+    }
 
-        .items{
-            list-style: none;
-        }
+    .items {
+        list-style: none; 
+        padding: 10px;
+    }
 
-        body {
-            background: #e2b09f;
-            background: -webkit-linear-gradient(right, #e2b09f, #e2b09f);
-            background: -moz-linear-gradient(right, #efbaa8, #efbaa8);
-            background: -o-linear-gradient(right, #e2b09f, #e2b09f);
-            background: linear-gradient(to left, #efbaa8, #efbaa8);
-            font-family: "Roboto", sans-serif;
-            color: #16110f;
-            letter-spacing: 1px;
-            font-weight: 550;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }   
-    </style>
-    <body>
-        <section class="cartSection">
-            <div class="cart">
+    .cancelButton {
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #E9967A;
+        width: 100px;
+        border: 0;
+        padding: 10px;
+        color: #FFFFFF;
+        font-size: 10px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        margin-bottom: 10px;
+        cursor: pointer;
+        z-index: 2; 
+        position: relative;
+    }
 
-                <ul class="items" >
-                    {% for d in data %}
-                        <li> {{d.id}} 
-                            {{d.numofprod}}
-                            <button class="buttonX" data-id="{{ d.id }}" >&cross;</button>  
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </section>
-    </body>
-    </html>
+    .cancelButton:hover{
+        background: linear-gradient(to bottom, #493933 5%, #493933 100%);
+        background-color: #493933;
+    }
+
+    .hidden{
+        display: none;
+    }
+
+    .purchaseButton {
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #E9967A;
+        width: 100px;
+        border: 0;
+        padding: 10px;
+        color: #FFFFFF;
+        font-size: 10px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        margin-bottom: 10px;
+        cursor: pointer;
+        z-index: 3; 
+    }
+
+    .purchaseButton:hover{
+        background: linear-gradient(to bottom, #493933 5%, #493933 100%);
+        background-color: #493933;
+    }
+
+    .buttonX{
+        position: sticky;
+        width: 3rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        background-color: #e2b09f;
+        border:0;
+        margin: 3px; 
+    }
+    .buttonX:hover{
+        background-color: #493933c5;
+    }
+
+    body {
+        background: #e2b09f;
+        background: -webkit-linear-gradient(right, #e2b09f, #e2b09f);
+        background: -moz-linear-gradient(right, #efbaa8, #efbaa8);
+        background: -o-linear-gradient(right, #e2b09f, #e2b09f);
+        background: linear-gradient(to left, #efbaa8, #efbaa8);
+        font-family: "Roboto", sans-serif;
+        color: #16110f;
+        letter-spacing: 1px;
+        font-weight: 550;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+</style>
+
+<body>
+    <section class="cartSection">
+        <div class="cart">
+            Current items in the cart: 
+            <ul class="items" id="listItems">
+                {% for d in data %}
+                <li> {{d.name}}
+                    {{d.numofprod}}
+                    <button class="buttonX" data-id="{{ d.id }}">&cross;</button>
+                </li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="cancelButton" id="cb"> Empty the cart </button>
+            <button type="button" class="purchaseButton" id="pb">Confirm your purchase</button>
+
+        </div>
+    </section>
+</body>
+
+<script src="{{url_for('static', filename='cart.js')}}"></script>
+
+</html>

@@ -19,16 +19,17 @@ closeButton.addEventListener("click", toggleModal);
 window.addEventListener("click", windowOnClick);
 
 
-function addProduct(idB) {
+function addProduct(idB, productName) {
 
-console.log(idB); 
+console.log(productName); 
 
 fetch('/shop/add', {
     method: 'POST',
     body: JSON.stringify({
         'mail': sessionStorage.getItem('currentUser'), 
         'id' : idB,
-        'numOfProd' : 1
+        'numOfProd' : 1, 
+        'name' : productName
     }),
     headers: {
         'Content-Type': 'application/json'
@@ -45,5 +46,5 @@ confirmButtons.forEach(el => el.addEventListener("click", addProduct));
 
 let buttons = document.querySelectorAll(".productButton"); 
 buttons.forEach(el => el.addEventListener("click", function (e) {
-        addProduct(e.currentTarget.dataset['idproduct']);
+        addProduct(e.currentTarget.dataset['idproduct'], e.currentTarget.dataset['idname']);
     })); 

@@ -73,6 +73,33 @@ def getProductByCategory(id_category):
 def mainRegistration():
     return render_template('registration.html')
 
+@app.route('/shop/cart/delete', methods = ['DELETE'])
+def delProduct(): 
+    global currentClientLogged
+    body = request.get_json()
+    idproduct = int(body.get('id'))
+    currentClientLogged.removeProduct(idproduct)
+    print(currentClientLogged.getCarts())
+    return jsonify({
+        'success' : True
+    })
+
+
+@app.route('/shop/cart/empty', methods = ['DELETE'])
+def emptyCart(): 
+    global currentClientLogged
+    currentClientLogged.emptyProducts()
+    return jsonify({
+        'success' : True
+    })
+
+@app.route('/shop/cart/confirm')
+def confirmPurchase(): 
+    global currentClientLogged
+    currentClientLogged.definitivepurchase()
+    return jsonify({
+        'success' : True
+    })
 
 @app.route('/shop/add', methods = ['POST'])
 def addProduct(): 
@@ -80,10 +107,11 @@ def addProduct():
     body = request.get_json()
     mailClient = body.get('mail')
     idproduct = int(body.get('id'))
-    numofprod = int(body.get('numOfProd'))    
-    currentClientLogged.addProduct(idproduct = idproduct, numofprod=numofprod)
+    numofprod = int(body.get('numOfProd'))  
+    idname = body.get('name')  
+    currentClientLogged.addProduct(idproduct = idproduct, numofprod=numofprod, name=idname)
     return jsonify({
-        'success' : 'i guess'
+        'success' : 'true'
     })
 
 
@@ -109,6 +137,11 @@ def registrationUser():
         abort(500)
     finally:
         models.db.session.close()
+
+
+@app.route('/profile')
+def profileOverview():
+    return render_template('profile.html')
 
 
 @app.route('/login', methods = ['POST'])

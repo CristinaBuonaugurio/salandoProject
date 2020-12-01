@@ -262,7 +262,7 @@
     <div class="top-nav-bar">
         <h1 class="titleText">Salando, the online shop just for <i>you</i>! </h1>
         <div class="profile">
-            <input type="image" src="{{url_for('static', filename='id-card.png')}}" class="logo-profile" />
+            <input type="image" src="{{url_for('static', filename='id-card.png')}}" class="logo-profile" onclick="location.href='/profile';"/>
 
         </div>
         <div class="cart">
@@ -292,7 +292,7 @@
                 <div class="descriptionProduct">
                     {{d.description}} 
                     <div class="quantityProduct">
-                        <button class="productButton" data-idproduct="{{d.idproduct}}" title="add to cart">add to cart</button>
+                        <button class="productButton" data-idproduct="{{d.idproduct}}" data-idname="{{d.name}}" title="add to cart">add to cart</button>
                         <div class="modal" >
                             <div class="modal-content"  >
                                 <span class="close-button">&times;</span>

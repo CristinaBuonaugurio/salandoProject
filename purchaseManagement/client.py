@@ -10,11 +10,18 @@ class currentUser:
     def getCarts(self):
         return self.manager.getCarts()  
 
-    def addProduct(self, idproduct, numofprod): 
+    def addProduct(self, idproduct, numofprod, name): 
         dict = {}
-        dict[idproduct] = numofprod
+        dict['id'] = idproduct
+        dict['numofprod'] = numofprod
+        dict['name'] = name
         self.manager.add(value=dict)
 
     def definitivepurchase(self) -> None:
         self.manager.executeAll()
+
+    def removeProduct(self, idproduct):
+        self.manager.remove(idproduct)
     
+    def emptyProducts(self): 
+        self.manager.removeAll()

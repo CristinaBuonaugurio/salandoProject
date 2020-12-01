@@ -31,10 +31,10 @@ class templateAcquisto:
         print("Sono nei coupon")
 
     def commit(self,cliente, value):
-
-        product = list(value.keys())[0]
+        product = value['id']
         print(product)
-        numofprod = value[product]
+        numofprod = value['numofprod']
+        print(numofprod)
         functionModels.buyProducts(cliente, product, numofprod , self.methodOfPayment)
 
 
@@ -72,12 +72,17 @@ class cartManager:
     def executeAll(self):
         for cart in self.listOfCarts:
             cart.confermaOrdine()
+        self.removeAll()
     
-    def removeAll():
+    def removeAll(self):
         self.listOfCarts.clear()
     
-    def remove(value):
-        self.listOfCarts.remove(value)
+    def remove(self,value):
+        for i in range(len(self.listOfCarts)):    
+            if value == int(self.listOfCarts[i].getValue()['id']):
+                self.listOfCarts.pop(i)
+                break
+                
 
     def getCarts(self): 
         carts = [cart.getValue() for cart in self.listOfCarts]

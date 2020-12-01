@@ -88,9 +88,9 @@ def updateQuantity(value):
     status = False
     try:
         print("Sono nell'updatequantity")
-        idproduct = list(value.keys())[0] 
-        quantity = value[idproduct]
-        print("Im before the first query")
+        idproduct = value['id']
+        quantity = value['numofprod']
+        print(quantity)
         p = models.product.query.filter_by(id=idproduct).first()
         currentq = p.quantity
         print(p)
