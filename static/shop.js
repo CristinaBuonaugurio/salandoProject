@@ -48,3 +48,17 @@ let buttons = document.querySelectorAll(".productButton");
 buttons.forEach(el => el.addEventListener("click", function (e) {
         addProduct(e.currentTarget.dataset['idproduct'], e.currentTarget.dataset['idname']);
     })); 
+
+
+function showCat(e){
+    const idCategory = e.currentTarget.dataset['id']; 
+    fetch('shop/'+ idCategory, {
+        method : 'GET',
+        headers:{
+            'Content-Type' : 'application/json'
+        }
+    });
+}
+
+let catButtons = document.querySelectorAll(".catButton"); 
+catButtons.forEach(el => el.addEventListener("click", showCat)); 

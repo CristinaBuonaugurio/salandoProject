@@ -67,21 +67,10 @@ def getProductsById(id, routeRequest = None):
     else:
         return results
 
-def getProductsByCategory(idcategory, routeRequest=None):
+def getProductsByCategory(idcategory):
     products = models.product.query.filter_by(idcategory = idcategory).all()
-    results = []
-    for p in products:
-        results.append(p.id)
-        results.append(p.name)
-        results.append(p.description)
-        results.append(p.cost)
-        results.append(p.quantity)
-        results.append(p.idcategory)
-
-    if routeRequest is not None:          
-        return jsonify(results)
-    else:
-        return results 
+    formatted_products = [p.format() for p in products ]
+    return formatted_products
 
 
 def updateQuantity(value):
@@ -92,9 +81,7 @@ def updateQuantity(value):
         quantity = value['numofprod']
         print(quantity)
         p = models.product.query.filter_by(id=idproduct).first()
-        currentq = p.quantity
-        print(p)
-        
+        currentq = p.quantity 
         updatedq = currentq - quantity
         models.db.session.query(models.product).filter_by(id=idproduct).update({'quantity': updatedq})
         models.db.session.commit()
@@ -163,7 +150,7 @@ def getBuyProductsByUsers(client, routeRequest=None):
         return dict
 
 
-
+### Get clients who has bought something
 def getClients():
     usersB = models.userBuyProduct.query.with_entities(models.userBuyProduct.iduser).distinct().all()
     results = []
@@ -213,6 +200,11 @@ def checkCoupon(iduser):
     else:
         return None
 
+def countCoupon(iduser):
+    rs = 0
+    rs = models.coupon.query.filter_by(iduser=iduser).count()
+    return rs
+
 def insertCoupon(idcategory, iduser, routeRequest=None):
     rs = models.coupon.query.filter_by(iduser=iduser).first()
     if rs is None:
@@ -247,7 +239,11 @@ def registerNewUser(mail, name, surname, birthdate, password, routeRequest=None)
     return jsonify("Grande sei registrato!")
 
 
-def getAllUsers(routeRequest=None):
+def getAllUsers():
     rs = models.user.query.all()
     results = []
-    return jsonify(results)
+    return results
+
+def getUser(idmail): 
+    user = models.user.query.filter_by(idmail=idmail).first()
+    return user.format()

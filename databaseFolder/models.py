@@ -124,6 +124,15 @@ class user(db.Model):
         else:
             return False
 
+    def format(self): 
+        return {
+            'idmail' : self.idmail,
+            'name' : self.name, 
+            'surname' : self.surname, 
+            'birthdate' : self.birthdate
+        }
+
+
     ### Relationships
     products = db.relationship('product', secondary='userbuyproduct', lazy='joined')
     coupons = db.relationship('coupon', backref='coupon')

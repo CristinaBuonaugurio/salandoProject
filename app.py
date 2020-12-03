@@ -30,24 +30,29 @@ def main_page():
     return render_template('login.html')
 
 
+
+
 @app.route('/shop', methods = ['GET'])
 def shop():
     products = models.product.query.order_by(models.product.idcategory).all()
     formatted_products = [p.format() for p in products ]
-    return render_template("shop.html", data=formatted_products)
+    return render_template('shop.html', data=formatted_products)
 
 @app.route('/magazine')
 def magazine_page():
-    return render_template('magazine.html')
-
-@app.route('/products', methods = ['GET'])
-def products():
     products = models.product.query.all()
     formatted_products = [p.format() for p in products ]
-    return jsonify({
-        'success' : True,
-        'products'  : formatted_products
-    })
+    return render_template('magazine.html', data=formatted_products)
+
+
+
+@app.route('/shop/<idcat>', methods = ['GET'])
+def getCateg(idcat): 
+    formatted_products =  functionModels.getProductsByCategory(int(idcat))
+    print(formatted_products)
+    return render_template('shop.html', data=formatted_products)
+
+
 
 @app.route('/shop/cart', methods = ['GET'])
 def getshoppingcart():
@@ -141,7 +146,8 @@ def registrationUser():
 
 @app.route('/profile')
 def profileOverview():
-    return render_template('profile.html')
+    data = currentClientLogged.getMyProfile()
+    return render_template('profile.html', data=data)
 
 
 @app.route('/login', methods = ['POST'])

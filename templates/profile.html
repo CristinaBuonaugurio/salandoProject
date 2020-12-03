@@ -1,5 +1,37 @@
 <html>
     <style>
+
+    @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+    .sectionProfile{
+        overflow: scroll;
+        background: #ffffff;
+        width: 80%;
+        height: 100%;
+        top: 50%;
+        left: 50%;
+        border : 3px solid #E9967A;
+        z-index: 1;
+        word-break: keep-all;
+    }
+
+    .imgCard{
+        height: 70px;
+        margin: 10px 10px;
+        float: left;
+    }
+
+    .info{
+        z-index: 2;
+        font-weight: 450;
+        word-break: keep-all;
+        background: #e2b09f81;
+    }
+    .logout{
+        z-index: 3;
+        height: 70px; 
+        bottom: 0%;
+        left: 0%;
+    }
         body {
         background: #e2b09f;
         background: -webkit-linear-gradient(right, #e2b09f, #e2b09f);
@@ -15,9 +47,29 @@
     }
     </style>
     <title>
-
+        Salando
     </title>
-    <body>
 
+
+    <body>
+        <section class="sectionProfile">
+            <div class="container">
+                <img class="imgCard" src="{{url_for('static', filename='id-card.png')}}">
+                <div class="info">
+                    <ul style="list-style:none;">
+                        <li> <b>Mail:</b> <i>{{data.idmail}}</i> </li>
+                        <li> <b>Name:</b> <i>{{data.name}}</i> </li>
+                        <li> <b>Surname:</b> <i>{{data.surname}}</i> </li>
+                        <li> <b>Birthdate:</b> <i>{{data.birthdate}}</i> </li>
+                        <li> <b>Number of coupon 
+                            available:</b> <i>{{data.coupon}}</i> </li>
+                    </ul>
+                </div>
+                <div class="logOut">
+                    <b>Logout</b>
+                    <input type="image" src="{{url_for('static', filename='exit-door.png')}}" class="logout" onclick="location.href='/';"/>
+                </div>
+            </div>
+        </section>
     </body>
 </html>

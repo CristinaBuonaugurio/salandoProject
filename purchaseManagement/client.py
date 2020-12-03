@@ -1,5 +1,5 @@
 from purchaseManagement import purchase
-
+from databaseFolder import functionModels
 class currentUser:
 
     def __init__(self, idmail):
@@ -25,3 +25,8 @@ class currentUser:
     
     def emptyProducts(self): 
         self.manager.removeAll()
+
+    def getMyProfile(self): 
+        data = functionModels.getUser(self.idmail)
+        data['coupon'] = functionModels.countCoupon(self.idmail)
+        return data
