@@ -216,34 +216,49 @@ def createProduct():
         models.db.session.close()
 
 
-@app.route('/amministration/products/description/<idProduct>', methods = ['POST'])
-def updateDescription(idProduct):
-    id = int(idProduct)
-    newdescription = request.get_json()['description']
-    status = functionModels.updateDescriptionProduct(id, newdescription)
-    if status:
-        return jsonify({
-            "success" : True
-        })
+@app.route('/magazine/modifyProduct', methods = ['POST'])
+def updateProduct(): 
+    body = request.get_json()
+    idproduct = int(body['id'])
+    description = str(body['description'])
+    quantity = int(body['quantity'])
+    print(description)
+    if quantity == 0 and description != "":
+        status = functionModels.updateDescriptionProduct(idproduct, description)
+        if status:
+           
+            return jsonify({
+                "success" : True
+            })
+        else:
+            return jsonify({
+                "success" : False
+            })
+    elif quantity !=0 and description == "":
+        status = functionModels.updateQuantityProduct(idproduct, quantity)
+        if status:
+            return jsonify({
+                "success" : True
+            })
+        else:
+            return jsonify({
+                "success" : False
+            })
     else:
-        return jsonify({
-            "success" : False
-        }) 
+        status1 = functionModels.updateDescriptionProduct(idproduct, description)
+        status = functionModels.updateQuantityProduct(idproduct, quantity)
+        if status1 and status: 
+            return jsonify({
+                "success" : True
+            })
+        else:
+            return jsonify({
+                "success" : False
+            })
+       
 
 
-@app.route('/amministration/products/quantity/<idProduct>', methods = ['POST'])
-def updateQuantity(idProduct):
-    id = int(idProduct)
-    newquantity = int(request.get_json()['quantity'])
-    status = functionModels.updateQuantityProduct(id, newquantity)
-    if status:
-        return jsonify({
-            "success" : True
-        })
-    else:
-        return jsonify({
-            "success" : False
-        })
+
 
 ### Following error handling
 
