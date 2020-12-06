@@ -2,8 +2,7 @@ from databaseFolder import functionModels as f
 from flask import jsonify
 from math import log
 def method():
-    calcute_tfidf()
-    return jsonify("Sto a fare il tf_idf")
+    return jsonify(calcute_tfidf())
 
 def calcute_tfidf():
     distinctClients = f.getClients()  ### get distinct clients, meaning only the users that have bought at least one product
@@ -35,3 +34,6 @@ def calcute_tfidf():
         for i in p.keys():
             p[i] *= productsRarity[i]
             print(p[i])
+
+    print(clientsPerProducts)
+    return clientsPerProducts

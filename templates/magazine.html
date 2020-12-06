@@ -43,11 +43,11 @@
     .titleText {
         font-family: "Roboto", sans-serif;
         letter-spacing: 1px;
-        font-weight: 550;
-        text-shadow: -2px 2px 15px #FFDAB9;
+        font-weight: 650;
         font-size: medium;
         float: left;
         padding: 5px;
+        text-transform: uppercase;
     }
 
     .productButton {
@@ -137,6 +137,75 @@
         box-shadow: 8px 5px 7px 5px rgba(0, 0, 0, 0.14);
 
     }
+    
+    .modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #cccccc6e;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 1rem 1.5rem;
+        width: 24rem;
+        border: 1px solid #493933;
+        color :white;
+        text-shadow: none;
+        color : #493933;
+    }
+
+
+    .confirmNewProd{
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #E9967A;
+        width: 50%;
+        border: 0;
+        padding: 20px;
+        color: #FFFFFF;
+        font-size: 10px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        margin-bottom: 10px;
+        cursor: pointer;
+        text-transform: uppercase;
+        float: right;
+    }
+
+    .confirmNewProd:hover{
+        background-color: #493933c5;
+    }
+    .close-button {
+        float: right;
+        width: 3rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        background-color: #e2b09f;
+    }
+
+    .close-button:hover {
+        background-color: #493933c5;
+    }
+
+    .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    }
 
     .section-products {
         overflow: scroll;
@@ -173,6 +242,39 @@
         font-size: 14px;
     }
 
+    .logout{
+        z-index: 1;
+        height: 40px; 
+        float:right;
+    }
+
+
+    .tfidfInfoH{
+        display: none;
+    }
+    .tfidfInfo{
+        display: show;
+        font-family: "Roboto", sans-serif;
+        text-transform: italic;
+        padding: 15px; 
+    }
+
+    .detailsTFIDF{
+        font-family: "Roboto", sans-serif;
+        background: #f2f2f2;
+        width: 100%;
+        border: 0;
+        margin: 0 0 15px;
+        padding: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+
+    #detailsList{
+        padding: 15px;
+    }
+
     body {
         background: #e2b09f;
         background: -webkit-linear-gradient(right, #e2b09f, #e2b09f);
@@ -183,42 +285,12 @@
         color: #16110f;
         letter-spacing: 1px;
         font-weight: 550;
-        text-shadow: -2px 2px 15px #FFDAB9;
+        
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
 
     @media only screen and (max-width: 980px) {
-        .top-nav-bar {
-            height: 108px;
-            border-bottom: 0;
-        }
-
-        .side-menu {
-
-            width: 100px;
-        }
-
-        .catButton {
-            height: 20px;
-            width: 20px;
-        }
-
-        .modalDescription {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 1rem 1.5rem;
-            width: 24rem;
-            border: 1px solid #493933;
-            color: white;
-            text-shadow: none;
-            color: #493933;
-        }
-
-        
     }
 </style>
 
@@ -229,24 +301,28 @@
 <body>
     <div class="top-nav-bar">
         <h1 class="titleText"> Management page </h1>
+        <div>
+            <input type="image" src="{{url_for('static', filename='exit-door.png')}}" class="logout" onclick="location.href='/';"/>
+        </div>
     </div>
     <section class="header">
         <div class="side-menu">
             <ul style="list-style:none;">
-                <li><button class="catButton"> All the products</button> </li>
-                <li><button class="catButton"> TF-IDF</button> </li>
-                <li><button class="catButton"> Clustering </button> </li>
+                <li><button class="catButton" data-id=0 id="addP"> Add new product</button></li>
+                <li><button class="catButton" data-id=1 > All the products</button> </li>
+                <li><button class="catButton" data-id=2 id="tfidf" > TF-IDF</button> </li>
+                <li><button class="catButton" data-id=3> Clustering </button> </li>
             </ul>
         </div>
     </section>
 
-    <section class="section-products">
-        <div class="products">
+    <section class="section-products">    
+        <div class="products" id="secProd">
             {% for d in data %}
             <div class="container">
                 {{d.name}}
                 <div class="descriptionProduct">
-                    {{d.description}} --  {{d.quantity}}
+                    {{d.description}} --- {{d.quantity}}
                     <form class="formProduct" >
                         <input type="description" class="description" id="desc" placeholder="Change description" />
                         <input type="number" id="quant" class="quantityNumber" value="0" min=0 max=100 placeholder="Change Quantity" />
@@ -255,6 +331,38 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+        <div class="modal" >
+            <div class="modal-content"  >
+                <span class="close-button">&times;</span>
+                <form class="newprod">
+                    <ul style="list-style: decimal inside;">
+                        Categories referenced by their ID number:
+                        <li> clothes </li>
+                        <li> games </li>
+                        <li> shoes </li>
+                        <li> forniture </li>
+                        <li> make up </li>
+                        <li> gardening </li>
+                        <li> electronics </li>
+                    </ul>
+                    <input type="text" id="nameProduct" placeholder="name of the new product" />
+                    <input type="text" id="descProduct" placeholder="short description"/>
+                    <input type="number" id="category" min="1" max="7" placeholder="category"/>
+                    <input type="text" id="cost" placeholder="cost"/>
+                    <input type="text" id="quantity" placeholder="initial quantity"/>
+                </form>
+                <button type="button" class="confirmNewProd" > add product </button>
+            </div>
+        </div>
+
+        <div class="tfidfInfoH" id="tfidfClass">
+            <div> This section is devoted to the study of behavioral marketing. Each user 
+                who has made at least one purchase is associated with the calculation of the TF-IDF, 
+                a bag of words model, focused on studying the categories preferred by the specific customer. </div>
+        </div>
+        <div id="detailsList">
+
         </div>
     </section>
 </body>

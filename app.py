@@ -193,10 +193,9 @@ def login():
 
 
 
-@app.route('/amministration/products', methods = ['POST'])
+@app.route('/magazine/products', methods = ['POST'])
 def createProduct():
     body = request.get_json()
-
     name = body.get('name')
     description = body.get('description')
     cost = int(body.get('cost'))
@@ -258,6 +257,10 @@ def updateProduct():
        
 
 
+@app.route('/magazine/tfidf')
+def tfidfShow():
+    return t.method()
+
 
 
 ### Following error handling
@@ -269,3 +272,4 @@ def internal_server_error(error):
         "error" : 500, 
         "message" : "Couldn't process the request"
     }), 500
+    
