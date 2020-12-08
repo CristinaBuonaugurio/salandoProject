@@ -18,7 +18,7 @@ def calcute_tfidf():
         for p in purchases.keys():   ### iterating the products and calculate their frequency 
             temp = purchases[p]
             purchases[p] /= float(numOfPurchases)
-
+            
             if p in productsRarity:     ###get in this new dictionary how many times a product is in a purchase
                 productsRarity[p] += temp
             else:
@@ -33,7 +33,6 @@ def calcute_tfidf():
     for c, p in clientsPerProducts.items():
         for i in p.keys():
             p[i] *= productsRarity[i]
-            print(p[i])
-
-    print(clientsPerProducts)
+            
+    
     return clientsPerProducts

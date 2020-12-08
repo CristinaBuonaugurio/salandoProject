@@ -29,19 +29,16 @@ def after_request(response):
 def main_page():
     return render_template('login.html')
 
-
-
-
 @app.route('/shop', methods = ['GET'])
 def shop():
     products = models.product.query.order_by(models.product.idcategory).all()
-    formatted_products = [p.format() for p in products ]
+    formatted_products = [p.format() for p in products]
     return render_template('shop.html', data=formatted_products)
 
 @app.route('/magazine')
 def magazine_page():
     products = models.product.query.all()
-    formatted_products = [p.format() for p in products ]
+    formatted_products = [p.format() for p in products]
     return render_template('magazine.html', data=formatted_products)
 
 
@@ -98,10 +95,12 @@ def emptyCart():
         'success' : True
     })
 
-@app.route('/shop/cart/confirm')
+@app.route('/shop/cart/confirm', methods = ['POST'])
 def confirmPurchase(): 
+    body = request.get_json()
+    methodOfP = body.get('paymentmethod')
     global currentClientLogged
-    currentClientLogged.definitivepurchase()
+    currentClientLogged.definitivepurchase(methodOfP)
     return jsonify({
         'success' : True
     })
@@ -162,7 +161,6 @@ def login():
         if result is not None:
             if result.compare(password):
                 currentClientLogged = client.currentUser(idmail=mail)
-            
                 return jsonify({
                     "success" : True,
                     "mail" : mail, 

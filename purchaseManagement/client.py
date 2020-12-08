@@ -17,8 +17,8 @@ class currentUser:
         dict['name'] = name
         self.manager.add(value=dict)
 
-    def definitivepurchase(self) -> None:
-        self.manager.executeAll()
+    def definitivepurchase(self, paymentMethod) -> None:
+        self.manager.executeAll(paymentMethod)
 
     def removeProduct(self, idproduct):
         self.manager.remove(idproduct)

@@ -9,9 +9,9 @@ class templateAcquisto:
         self.methodOfPayment = None
 
 
-    def commitPurchase(self,cliente, value):
+    def commitPurchase(self,cliente, value, paymentMethod):
         self.updateQuantityProduct(value)
-        self.setMethodOfPayment()
+        self.setMethodOfPayment(paymentMethod)
         self.hasCoupon()
         self.commit(cliente, value)
 
@@ -21,11 +21,9 @@ class templateAcquisto:
         if functionModels.updateQuantity(value): 
             print("Updated Correctly")
        
-    def changeMethodPayment(self, newmp):
-        self.methodOfPayment = newmp
 
-    def setMethodOfPayment(self):
-        self.methodOfPayment = "CONTANTI" 
+    def setMethodOfPayment(self, paymentMethod):
+        self.methodOfPayment = paymentMethod
             
     def hasCoupon(self):
         print("Sono nei coupon")
@@ -52,8 +50,8 @@ class concreteCart(InterfaceCart):
         self.cliente = cliente
         self.value = value ### It has to be a dictionary with key id product and value the number of that product
 
-    def confermaOrdine(self):
-        self.templateAcquisto.commitPurchase(self.cliente, self.value)
+    def confermaOrdine(self, paymentMethod):
+        self.templateAcquisto.commitPurchase(self.cliente, self.value, paymentMethod)
     
     def getValue(self): 
         return self.value
@@ -69,9 +67,9 @@ class cartManager:
     def add(self, value) -> None: 
         self.listOfCarts.append(concreteCart(self.templateAcquisto,self.cliente,value))
 
-    def executeAll(self):
+    def executeAll(self, paymentMethod):
         for cart in self.listOfCarts:
-            cart.confermaOrdine()
+            cart.confermaOrdine(paymentMethod)
         self.removeAll()
     
     def removeAll(self):

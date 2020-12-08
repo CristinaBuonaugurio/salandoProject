@@ -51,13 +51,20 @@ emptyButtonEvent.addEventListener("click", emptyCart);
 
 
 function confirmPurchase(){
+    const methodOfP = 'CONTANTI'; 
     fetch('/shop/cart/confirm', {
+        method : 'POST',
+        body : JSON.stringify({
+            'paymentmethod' : methodOfP
+        }),
         headers: {
             'Content-Type': 'application/json'
         }
     }).then(function(){
         const list = document.getElementById('listItems'); 
         list.innerHTML = "";
+        alert("Thanks for your purchase! Will you be now redirected to the shop page!"); 
+        window.location.href = '/shop'; 
     })    
 }
 
