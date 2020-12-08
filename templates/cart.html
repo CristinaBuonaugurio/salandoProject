@@ -87,6 +87,81 @@
         background-color: #493933c5;
     }
 
+    .modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #cccccc6e;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 1rem 1.5rem;
+        width: 24rem;
+        border: 1px solid #493933;
+        color :white;
+        text-shadow: none;
+        color : #493933;
+    }
+
+    .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    }
+
+    .close-button {
+        float: right;
+        width: 3rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        background-color: #e2b09f;
+    }
+
+    .close-button:hover {
+        background-color: #493933c5;
+    }
+
+    .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    }
+    .confirmPurchase{
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #E9967A;
+        width: 100px;
+        border: 0;
+        padding: 10px;
+        color: #FFFFFF;
+        font-size: 10px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        margin-bottom: 10px;
+        cursor: pointer;
+        z-index: 3;
+    }
+
+    .confirmButton:hover{
+        background: linear-gradient(to bottom, #493933 5%, #493933 100%);
+        background-color: #493933;
+    }
+
     body {
         background: #e2b09f;
         background: -webkit-linear-gradient(right, #e2b09f, #e2b09f);
@@ -118,6 +193,16 @@
             <button type="button" class="purchaseButton" id="pb">Confirm your purchase</button>
         </div>
     </section>
+    <div class="modal" >
+        <div class="modal-content"  >
+            <span class="close-button">&times;</span>
+            Choose your favorite method of payment. 
+            <label><input type="radio" class="payment"  name="payment" data-id="CONTANTI" value="CONTANTI"> Cash </label>
+            <label><input type="radio" class="payment" name="payment" data-id="CARTA DI CREDITO" value="CARTA DI CREDITO"> Credit Card </label>
+            <label><input type="radio" class="payment" name="payment" data-id="BANCOMAT" value="BANCOMAT"> Bancomat </label>
+            <button type="button" class="confirmPurchase" > Confirm </button>
+        </div>
+    </div>
 </body>
 
 <script src="{{url_for('static', filename='cart.js')}}"></script>

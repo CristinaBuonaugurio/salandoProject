@@ -45,7 +45,7 @@ def magazine_page():
 
 @app.route('/shop/<idcat>', methods = ['GET'])
 def getCateg(idcat): 
-    formatted_products =  functionModels.getProductsByCategory(int(idcat))
+    formatted_products = functionModels.getProductsByCategory(int(idcat))
     print(formatted_products)
     return render_template('shop.html', data=formatted_products)
 

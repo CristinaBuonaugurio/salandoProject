@@ -20,9 +20,7 @@ window.addEventListener("click", windowOnClick);
 
 
 function addProduct(idB, productName) {
-
 console.log(productName); 
-
 fetch('/shop/add', {
     method: 'POST',
     body: JSON.stringify({
@@ -46,9 +44,14 @@ confirmButtons.forEach(el => el.addEventListener("click", addProduct));
 
 let buttons = document.querySelectorAll(".productButton"); 
 buttons.forEach(el => el.addEventListener("click", function (e) {
-        addProduct(e.currentTarget.dataset['idproduct'], e.currentTarget.dataset['idname']);
+        if( e.currentTarget.dataset['stock'] > 0){
+            addProduct(e.currentTarget.dataset['idproduct'], e.currentTarget.dataset['idname']);
+            e.currentTarget.dataset['stock'] = e.currentTarget.dataset['stock'] - 1; 
+            if(e.currentTarget.dataset['stock'] == 0){
+                e.currentTarget.style.visibility = "hidden";
+            }   
+        }
     })); 
-
 
 function showCat(e){
     const idCategory = e.currentTarget.dataset['id']; 
@@ -62,3 +65,5 @@ function showCat(e){
 
 let catButtons = document.querySelectorAll(".catButton"); 
 catButtons.forEach(el => el.addEventListener("click", showCat)); 
+
+

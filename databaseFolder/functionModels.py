@@ -40,12 +40,13 @@ def getAllProducts(routeRequest = None):
     products = models.product.query.all()
     results = []
     for p in products:
-        results.append(p.id)
-        results.append(p.name)
-        results.append(p.description)
-        results.append(p.cost)
-        results.append(p.quantity)
-        results.append(p.idcategory)  
+        if p.quantity > 0:
+            results.append(p.id)
+            results.append(p.name)
+            results.append(p.description)
+            results.append(p.cost)
+            results.append(p.quantity)
+            results.append(p.idcategory)  
     
     if routeRequest is not None:          
         return jsonify(results)
@@ -69,7 +70,7 @@ def getProductsById(id, routeRequest = None):
 
 def getProductsByCategory(idcategory):
     products = models.product.query.filter_by(idcategory = idcategory).all()
-    formatted_products = [p.format() for p in products ]
+    formatted_products = [p.format() for p in products if p.quantity > 0]
     return formatted_products
 
 
@@ -83,8 +84,9 @@ def updateQuantity(value):
         p = models.product.query.filter_by(id=idproduct).first()
         currentq = p.quantity 
         updatedq = currentq - quantity
-        models.db.session.query(models.product).filter_by(id=idproduct).update({'quantity': updatedq})
-        models.db.session.commit()
+        if currentq >= quantity:
+            models.db.session.query(models.product).filter_by(id=idproduct).update({'quantity': updatedq})
+            models.db.session.commit()
         status = True
     except:
         models.db.session.rollback()
@@ -179,10 +181,12 @@ def getNumBuyOfProduct(idproduct, routeRequest=None):
         return results
 
 def buyProducts(client, product, numofprod, methodofpayment):
-    purchase = models.userBuyProduct(id=random.randint(0,10000),iduser=client, idproduct = product, numofprod =numofprod, methodofpayment=methodofpayment)
-    models.db.session.add(purchase)
-    models.db.session.commit()
-    return jsonify("The client {} has bought the product with id: {}".format(client, product))
+    p = models.product.query.filter_by(id=product).first()
+    if p.quantity >= numofprod:
+        purchase = models.userBuyProduct(id=random.randint(0,10000),iduser=client, idproduct = product, numofprod =numofprod, methodofpayment=methodofpayment)
+        models.db.session.add(purchase)
+        models.db.session.commit()
+        return jsonify("The client {} has bought the product with id: {}".format(client, product))
 
 
 
