@@ -31,8 +31,9 @@ def main_page():
 
 @app.route('/shop', methods = ['GET'])
 def shop():
+    global currentClientLogged
     products = models.product.query.order_by(models.product.idcategory).all()
-    formatted_products = [p.format() for p in products]
+    formatted_products = [p.format() for p in products if (p.quantity - currentClientLogged.getNumOfP(p.id)) > 0]
     return render_template('shop.html', data=formatted_products)
 
 @app.route('/magazine')
@@ -42,11 +43,11 @@ def magazine_page():
     return render_template('magazine.html', data=formatted_products)
 
 
-
 @app.route('/shop/<idcat>', methods = ['GET'])
-def getCateg(idcat): 
-    formatted_products = functionModels.getProductsByCategory(int(idcat))
-    print(formatted_products)
+def getCateg(idcat):
+    global currentClientLogged
+    products = functionModels.getProductsByCategory(int(idcat))
+    formatted_products = [p.format() for p in products if (p.quantity - currentClientLogged.getNumOfP(p.id)) > 0]
     return render_template('shop.html', data=formatted_products)
 
 

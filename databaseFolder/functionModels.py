@@ -70,8 +70,7 @@ def getProductsById(id, routeRequest = None):
 
 def getProductsByCategory(idcategory):
     products = models.product.query.filter_by(idcategory = idcategory).all()
-    formatted_products = [p.format() for p in products if p.quantity > 0]
-    return formatted_products
+    return products
 
 
 def updateQuantity(value):

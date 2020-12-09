@@ -10,6 +10,11 @@ class currentUser:
     def getCarts(self):
         return self.manager.getCarts()  
 
+
+    def getNumOfP(self, idproduct):
+        return self.manager.getNumOfP(idproduct)
+
+        
     def addProduct(self, idproduct, numofprod, name): 
         dict = {}
         dict['id'] = idproduct

@@ -81,6 +81,16 @@ class cartManager:
                 self.listOfCarts.pop(i)
                 break
                 
+    def getNumOfP(self, idproduct):
+        cont = 0 
+        for cart in self.listOfCarts:
+            print(cart.getValue()['id'])
+            if idproduct == cart.getValue()['id']:
+                cont += 1
+        print(cont)
+        return cont
+
+
 
     def getCarts(self): 
         carts = [cart.getValue() for cart in self.listOfCarts]
