@@ -278,5 +278,5 @@ def internal_server_error(error):
 
 
 
-if __name__ == "_main_":
+if __name__ == "_app_":
     app.run()
