@@ -1,1 +1,1 @@
-web:gunicorn Salando.app:app 
+web:gunicorn app:app 
