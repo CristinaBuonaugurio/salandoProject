@@ -26,7 +26,6 @@ mccabe==0.6.1
 numpy==1.18.1
 pbr==5.5.1
 pipenv==2020.11.15
-protobuf==3.11.4
 psycopg2==2.8.6
 psycopg2-binary==2.8.6
 pycodestyle==2.6.0
