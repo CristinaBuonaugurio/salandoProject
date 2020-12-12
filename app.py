@@ -14,6 +14,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 models.db.init_app(app)
 migrate = Migrate(app, models.db)
 
+
+
+
 global currentClientLogged 
 
 
@@ -272,3 +275,8 @@ def internal_server_error(error):
         "message" : "Couldn't process the request"
     }), 500
     
+
+
+
+if __name__ == "_main_":
+    app.run()
