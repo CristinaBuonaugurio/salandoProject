@@ -1,0 +1,485 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.0
+-- Dumped by pg_dump version 13.0
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: admin; Type: TABLE; Schema: public; Owner: Cristina
+--
+
+CREATE TABLE public.admin (
+    idmail character varying(30) NOT NULL,
+    name character varying(20) NOT NULL,
+    surname character varying(30) NOT NULL,
+    birthdate date,
+    password bytea NOT NULL
+);
+
+
+ALTER TABLE public.admin OWNER TO "Cristina";
+
+--
+-- Name: alembic_version; Type: TABLE; Schema: public; Owner: Cristina
+--
+
+CREATE TABLE public.alembic_version (
+    version_num character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.alembic_version OWNER TO "Cristina";
+
+--
+-- Name: category; Type: TABLE; Schema: public; Owner: Cristina
+--
+
+CREATE TABLE public.category (
+    id integer NOT NULL,
+    description character varying(20) NOT NULL
+);
+
+
+ALTER TABLE public.category OWNER TO "Cristina";
+
+--
+-- Name: category_id_seq; Type: SEQUENCE; Schema: public; Owner: Cristina
+--
+
+CREATE SEQUENCE public.category_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.category_id_seq OWNER TO "Cristina";
+
+--
+-- Name: category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Cristina
+--
+
+ALTER SEQUENCE public.category_id_seq OWNED BY public.category.id;
+
+
+--
+-- Name: coupon; Type: TABLE; Schema: public; Owner: Cristina
+--
+
+CREATE TABLE public.coupon (
+    id integer NOT NULL,
+    endvalidation date NOT NULL,
+    iduser character varying(30) NOT NULL,
+    idcategory integer NOT NULL
+);
+
+
+ALTER TABLE public.coupon OWNER TO "Cristina";
+
+--
+-- Name: coupon_id_seq; Type: SEQUENCE; Schema: public; Owner: Cristina
+--
+
+CREATE SEQUENCE public.coupon_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.coupon_id_seq OWNER TO "Cristina";
+
+--
+-- Name: coupon_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Cristina
+--
+
+ALTER SEQUENCE public.coupon_id_seq OWNED BY public.coupon.id;
+
+
+--
+-- Name: product; Type: TABLE; Schema: public; Owner: Cristina
+--
+
+CREATE TABLE public.product (
+    id integer NOT NULL,
+    name character varying(20) NOT NULL,
+    description character varying NOT NULL,
+    cost integer NOT NULL,
+    quantity integer NOT NULL,
+    idcategory integer NOT NULL
+);
+
+
+ALTER TABLE public.product OWNER TO "Cristina";
+
+--
+-- Name: product_id_seq; Type: SEQUENCE; Schema: public; Owner: Cristina
+--
+
+CREATE SEQUENCE public.product_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.product_id_seq OWNER TO "Cristina";
+
+--
+-- Name: product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Cristina
+--
+
+ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
+
+
+--
+-- Name: userbuyproduct; Type: TABLE; Schema: public; Owner: Cristina
+--
+
+CREATE TABLE public.userbuyproduct (
+    id integer NOT NULL,
+    iduser character varying(30) NOT NULL,
+    idproduct integer NOT NULL,
+    numofprod integer NOT NULL,
+    methodofpayment character varying(30) NOT NULL
+);
+
+
+ALTER TABLE public.userbuyproduct OWNER TO "Cristina";
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: Cristina
+--
+
+CREATE TABLE public.users (
+    idmail character varying(30) NOT NULL,
+    name character varying(20) NOT NULL,
+    surname character varying(30) NOT NULL,
+    birthdate date,
+    password bytea NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO "Cristina";
+
+--
+-- Name: category id; Type: DEFAULT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.category ALTER COLUMN id SET DEFAULT nextval('public.category_id_seq'::regclass);
+
+
+--
+-- Name: coupon id; Type: DEFAULT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.coupon ALTER COLUMN id SET DEFAULT nextval('public.coupon_id_seq'::regclass);
+
+
+--
+-- Name: product id; Type: DEFAULT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.product ALTER COLUMN id SET DEFAULT nextval('public.product_id_seq'::regclass);
+
+
+--
+-- Data for Name: admin; Type: TABLE DATA; Schema: public; Owner: Cristina
+--
+
+COPY public.admin (idmail, name, surname, birthdate, password) FROM stdin;
+stina@admin.com	stina	stina	1994-11-10	\\x243262243132243032476e396f7073706661663744614456494a72722e6a6b662f6968644e6c55507a72354f42784a572e2f7a4c66384b5a654e5561
+\.
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: Cristina
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+7c77ee8e506e
+\.
+
+
+--
+-- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: Cristina
+--
+
+COPY public.category (id, description) FROM stdin;
+1	clothes
+2	games
+3	shoes
+4	forniture
+5	make up
+6	gardening
+7	electronics
+\.
+
+
+--
+-- Data for Name: coupon; Type: TABLE DATA; Schema: public; Owner: Cristina
+--
+
+COPY public.coupon (id, endvalidation, iduser, idcategory) FROM stdin;
+\.
+
+
+--
+-- Data for Name: product; Type: TABLE DATA; Schema: public; Owner: Cristina
+--
+
+COPY public.product (id, name, description, cost, quantity, idcategory) FROM stdin;
+3	god of war	the new god of war	60	47	2
+9	heels	very high red heels	150	5	3
+10	snike	shoes for sports	50	30	3
+12	skirt	the scottish one	30	15	1
+13	t-shirt	basic white	20	10	1
+19	just dance 2037	just dance from the future for switch 6	60	6	2
+11	dress	the evergreen red dress	80	8	1
+22	shovel	for digging your insicurities	4	9	6
+18	lipstick	color nude long last	13	12	5
+20	cyberpunk 1994	ps1 game retro	100	18	2
+23	fertilizer	let them grow	10	12	6
+14	bedside table	blue for room kids	550	18	4
+24	lipstick vogue	a red one but fashion	20	59	5
+7	wardrobe	A blue one for kids room	350	17	4
+17	fat plant	fat and cute green plant	9	6	6
+15	brush	blush brush	8	26	5
+4	FireEmblemIIIH	A very good rpg game for console switch.	55	11	2
+25	jacket	black jacket sintetic	35	20	1
+1	t-shirt	t-shirt of good quality	35	2	1
+16	jack audio	audio to type c	8	27	7
+21	iphone log8	apples smarthphone	1300	9	7
+8	kitchen	Modern kitchen	1250	4	4
+\.
+
+
+--
+-- Data for Name: userbuyproduct; Type: TABLE DATA; Schema: public; Owner: Cristina
+--
+
+COPY public.userbuyproduct (id, iduser, idproduct, numofprod, methodofpayment) FROM stdin;
+9886	stina@mail.it	1	3	CONTANTI
+8607	stina@mail.it	1	3	CONTANTI
+8468	stina@mail.it	1	3	CONTANTI
+7017	stina@mail.it	1	3	CONTANTI
+1203	stina@mail.it	1	3	CONTANTI
+2988	stina@mail.it	1	1	CONTANTI
+472	stina@mail.it	1	1	CONTANTI
+770	stina@mail.it	1	1	CONTANTI
+7423	stina@mail.it	1	1	CONTANTI
+7369	stina@mail.it	1	1	CONTANTI
+3736	stina@mail.it	1	1	CONTANTI
+1800	stina@mail.it	1	1	CONTANTI
+2073	stina@mail.it	1	1	CONTANTI
+1447	stina@mail.it	1	1	CONTANTI
+4678	stina@mail.it	1	1	CONTANTI
+7393	stina@mail.it	1	1	CONTANTI
+2562	stina@mail.it	1	1	CONTANTI
+2711	stina@mail.it	1	1	CONTANTI
+3944	stina@mail.it	11	1	CONTANTI
+210	stina@mail.it	18	1	CONTANTI
+1984	stina@mail.it	16	1	CONTANTI
+2623	serena@angolocreazione.it	17	1	CONTANTI
+8156	serena@angolocreazione.it	22	1	CONTANTI
+6183	serena@angolocreazione.it	23	1	CONTANTI
+4737	serena@angolocreazione.it	16	1	CONTANTI
+2902	serena@angolocreazione.it	23	1	CONTANTI
+1249	serena@angolocreazione.it	18	1	CONTANTI
+4180	serena@angolocreazione.it	24	1	CONTANTI
+7481	serena@angolocreazione.it	15	1	CONTANTI
+6566	serena@angolocreazione.it	18	1	CONTANTI
+2850	serena@angolocreazione.it	18	1	CONTANTI
+1352	serena@angolocreazione.it	18	1	CONTANTI
+9679	serena@angolocreazione.it	18	1	CONTANTI
+4570	serena@angolocreazione.it	18	1	CONTANTI
+9873	serena@angolocreazione.it	18	1	CONTANTI
+8149	serena@angolocreazione.it	18	1	CONTANTI
+6839	serena@angolocreazione.it	18	1	CONTANTI
+1822	serena@angolocreazione.it	18	1	CONTANTI
+5098	serena@angolocreazione.it	18	1	CONTANTI
+5988	serena@angolocreazione.it	18	1	CONTANTI
+545	serena@angolocreazione.it	18	1	CONTANTI
+5343	serena@angolocreazione.it	17	1	CONTANTI
+3611	serena@angolocreazione.it	17	1	CONTANTI
+8400	serena@angolocreazione.it	17	1	CONTANTI
+7593	serena@angolocreazione.it	15	1	CONTANTI
+2113	serena@angolocreazione.it	15	1	CONTANTI
+7330	serena@angolocreazione.it	15	1	CONTANTI
+4482	stina@mail.it	20	1	CONTANTI
+4788	stina@mail.it	19	1	CONTANTI
+3907	stina@mail.it	3	1	CONTANTI
+3206	larxene@enel.it	16	1	CONTANTI
+3232	larxene@enel.it	21	1	CONTANTI
+6672	conan@doyle.it	7	1	CONTANTI
+4881	conan@doyle.it	8	1	CONTANTI
+2013	larxene@enel.it	19	1	CONTANTI
+3882	larxene@enel.it	3	1	CONTANTI
+6140	larxene@enel.it	19	1	CARTA DI CREDITO
+5520	larxene@enel.it	18	1	BANCOMAT
+7775	larxene@enel.it	14	1	BANCOMAT
+804	larxene@enel.it	19	1	CONTANTI
+396	larxene@enel.it	18	1	CARTA DI CREDITO
+8659	conan@doyle.it	7	1	CARTA DI CREDITO
+9288	conan@doyle.it	14	1	CONTANTI
+7173	conan@doyle.it	14	1	CONTANTI
+2602	conan@doyle.it	14	1	CONTANTI
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: Cristina
+--
+
+COPY public.users (idmail, name, surname, birthdate, password) FROM stdin;
+stina@mail.it	cristina	buonaugurio	1994-11-10	\\x243262243132244f4a343447504d4a4e58654b306969376148706b314f4b39554b7944646d32444564426c75377a4277392e775949316976512f666d
+pippo@sowlo.it	pippo	sowlo	1987-07-13	\\x24326224313224327851747735464f4959784c574d55334f33304572754476684d5577494f38787649347830636f787631442e714d744f3437596447
+serena@angolocreazione.it	serena	creativa	1994-04-16	\\x243262243132243052644d644748385244483372787469492e6d637265626f61414f47336f5935657676434a467741627063706a794a6d4f35736f4b
+larxene@enel.it	larxene	biondona	1998-06-08	\\x2432622431322439497a484f3755542e73306369734a7a45315858754f584975684b55336f4d315347736751716a3679773971564674377270557275
+conan@doyle.it	conan	doyle	1943-06-13	\\x243262243132242f564451545368506d5a785058506c6563636d70684f612e355947374244376e6453464f4f6f7a6e5850686c6c504b754a54524561
+\.
+
+
+--
+-- Name: category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Cristina
+--
+
+SELECT pg_catalog.setval('public.category_id_seq', 7, true);
+
+
+--
+-- Name: coupon_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Cristina
+--
+
+SELECT pg_catalog.setval('public.coupon_id_seq', 2, true);
+
+
+--
+-- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Cristina
+--
+
+SELECT pg_catalog.setval('public.product_id_seq', 25, true);
+
+
+--
+-- Name: admin admin_pkey; Type: CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.admin
+    ADD CONSTRAINT admin_pkey PRIMARY KEY (idmail);
+
+
+--
+-- Name: alembic_version alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.alembic_version
+    ADD CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num);
+
+
+--
+-- Name: category category_pkey; Type: CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.category
+    ADD CONSTRAINT category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: coupon coupon_pkey; Type: CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.coupon
+    ADD CONSTRAINT coupon_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product product_pkey; Type: CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.product
+    ADD CONSTRAINT product_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: userbuyproduct userbuyproduct_pkey; Type: CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.userbuyproduct
+    ADD CONSTRAINT userbuyproduct_pkey PRIMARY KEY (id, iduser, idproduct);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (idmail);
+
+
+--
+-- Name: coupon coupon_idcategory_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.coupon
+    ADD CONSTRAINT coupon_idcategory_fkey FOREIGN KEY (idcategory) REFERENCES public.category(id);
+
+
+--
+-- Name: coupon coupon_iduser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.coupon
+    ADD CONSTRAINT coupon_iduser_fkey FOREIGN KEY (iduser) REFERENCES public.users(idmail);
+
+
+--
+-- Name: product product_idcategory_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.product
+    ADD CONSTRAINT product_idcategory_fkey FOREIGN KEY (idcategory) REFERENCES public.category(id);
+
+
+--
+-- Name: userbuyproduct userbuyproduct_idproduct_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.userbuyproduct
+    ADD CONSTRAINT userbuyproduct_idproduct_fkey FOREIGN KEY (idproduct) REFERENCES public.product(id);
+
+
+--
+-- Name: userbuyproduct userbuyproduct_iduser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Cristina
+--
+
+ALTER TABLE ONLY public.userbuyproduct
+    ADD CONSTRAINT userbuyproduct_iduser_fkey FOREIGN KEY (iduser) REFERENCES public.users(idmail);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

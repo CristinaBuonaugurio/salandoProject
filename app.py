@@ -8,7 +8,7 @@ from purchaseManagement import client
 
 app = Flask(__name__, instance_relative_config=True) #create a flask application
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Cristina@localhost:5432/salando'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://hjvcjvlgibozpx:500cf645d68dadc12e801a0ed08347412d3f04ab855a98de508a4e56f7c7ae7b@ec2-34-248-165-3.eu-west-1.compute.amazonaws.com:5432/d66ps5er7qk611'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 models.db.init_app(app)
