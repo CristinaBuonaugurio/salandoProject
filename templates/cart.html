@@ -134,6 +134,14 @@
         background-color: #493933c5;
     }
 
+
+    .backToShop{
+        height: 40px;
+        margin: 10px 10px;
+        float: right;
+        cursor: pointer;
+    }
+
     .show-modal {
         opacity: 1;
         visibility: visible;
@@ -195,6 +203,7 @@
             </ul>
             <button type="button" class="cancelButton" id="cb"> Empty the cart </button>
             <button type="button" class="purchaseButton" id="pb">Confirm your purchase</button>
+            <input type="image" src="{{url_for('static', filename='back.png')}}" class="backToShop" onclick="location.href='/shop';"/>
         </div>
     </section>
     <div class="modal" >
